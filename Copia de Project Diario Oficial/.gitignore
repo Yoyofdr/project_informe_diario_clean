@@ -1,0 +1,8 @@
+# Ignorar archivos de entorno que contienen claves secretas
+.env
+
+# Ignorar el directorio de cache de Python
+__pycache__/
+
+# Ignorar archivos generados por el sistema operativo
+.DS_Store 

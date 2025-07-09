@@ -1,0 +1,49 @@
+[DEBUG] Usando requests para obtener el HTML: https://www.diariooficial.interior.gob.cl/edicionelectronica/URL_INVALIDA_PRUEBA?date=07-07-2025
+
+[DEBUG] HTML OBTENIDO DEL SUMARIO (requests):
+
+<!doctype html>
+<html>
+
+
+    <head>
+        <meta charset="utf-8">
+        <title>Diario Oficial &#8211; República de Chile</title>
+
+        <script type="text/javascript" src="https://www.diariooficial.interior.gob.cl/assets/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="https://www.diariooficial.interior.gob.cl/assets/js/jquery.numeric.js"></script>
+        <script type="text/javascript" src="https://www.diariooficial.interior.gob.cl/assets/js/modernizr.2.5.3.min.js"></script>
+        <script type="text/javascript" src="https://www.diariooficial.interior.gob.cl/assets/js/jquery.bxslider.min.js"></script>
+        <script type="text/javascript" src="https://www.diariooficial.interior.gob.cl/assets/js/jquery.fancybox.pack.js"></script>
+        <script type="text/javascript" src="https://www.diariooficial.interior.gob.cl/assets/js/pagevideos.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://www.diariooficial.interior.gob.cl/assets/css/style.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.diariooficial.interior.gob.cl/assets/css/jquery.fancybox.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.diariooficial.interior.gob.cl/assets/css/jquery.bxslider.css" />
+        <link rel="stylesheet" type="text/css" href="https://www.diariooficial.interior.gob.cl/assets/css/pagevideos.css" />
+
+
+        <script>
+            $(document).ready(function (e) {
+
+                $(".cve").numeric();
+
+
+                $('#audio').fancybox({
+                    fitToView: false,
+                    width: '680',
+                    height: '72',
+                    autoSize: true,
+                    closeClick: true
+                });
+
+                $("#latest").fancybox({
+                    maxWidth: 9999,
+                    maxHeight: 9999,
+                    fitToView: true,
+                    width: '100%',
+                    height: 
+
+[DEBUG] FIN HTML OBTENIDO (requests)
+
+Correo enviado a rfernandezdelrio@uc.cl (from: rodrigo@carvuk.com)

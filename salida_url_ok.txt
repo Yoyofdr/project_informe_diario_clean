@@ -1,0 +1,83 @@
+[DEBUG] Usando Selenium para obtener el HTML: https://www.diariooficial.interior.gob.cl/edicionelectronica?date=07-07-2025
+[Selenium] Advertencia: No se encontró tabla en el HTML renderizado. Message: 
+Stacktrace:
+0   undetected_chromedriver             0x0000000105261318 undetected_chromedriver + 6148888
+1   undetected_chromedriver             0x00000001052588ca undetected_chromedriver + 6113482
+2   undetected_chromedriver             0x0000000104ce9e10 undetected_chromedriver + 417296
+3   undetected_chromedriver             0x0000000104d3bc94 undetected_chromedriver + 752788
+4   undetected_chromedriver             0x0000000104d3beb1 undetected_chromedriver + 753329
+5   undetected_chromedriver             0x0000000104d8bdd4 undetected_chromedriver + 1080788
+6   undetected_chromedriver             0x0000000104d61ced undetected_chromedriver + 908525
+7   undetected_chromedriver             0x0000000104d8918c undetected_chromedriver + 1069452
+8   undetected_chromedriver             0x0000000104d61a93 undetected_chromedriver + 907923
+9   undetected_chromedriver             0x0000000104d2e0f7 undetected_chromedriver + 696567
+10  undetected_chromedriver             0x0000000104d2ed61 undetected_chromedriver + 699745
+11  undetected_chromedriver             0x000000010521e260 undetected_chromedriver + 5874272
+12  undetected_chromedriver             0x0000000105222299 undetected_chromedriver + 5890713
+13  undetected_chromedriver             0x00000001051fa032 undetected_chromedriver + 5726258
+14  undetected_chromedriver             0x0000000105222c0f undetected_chromedriver + 5893135
+15  undetected_chromedriver             0x00000001051e8d24 undetected_chromedriver + 5655844
+16  undetected_chromedriver             0x0000000105245df8 undetected_chromedriver + 6036984
+17  undetected_chromedriver             0x0000000105245fc0 undetected_chromedriver + 6037440
+18  undetected_chromedriver             0x0000000105258461 undetected_chromedriver + 6112353
+19  libsystem_pthread.dylib             0x00007ff8070031d3 _pthread_start + 125
+20  libsystem_pthread.dylib             0x00007ff806ffebd3 thread_start + 15
+
+
+[DEBUG] HTML OBTENIDO DEL SUMARIO (selenium):
+
+<html lang="en" class=""><head>
+        <meta charset="UTF-8">
+        <title>Diario Oficial – República de Chile</title>
+        <link rel="stylesheet" href="css/do.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/jquery.fancybox.css">
+        <script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-ZVDT2Y2SY4&amp;cx=c&amp;_slc=1"></script><script async="" src="//www.google-analytics.com/analytics.js"></script><script src="js/jquery-3.1.0.min.js"></script>
+
+        <!-- jquery ui -->
+        <link rel="stylesheet" href="plugins/jqueryui/jquery-ui.min.css">
+        <script src="plugins/jqueryui/jquery-ui.min.js"></script>
+        <script src="plugins/jqueryui/datepicker-es.js"></script>
+        <script type="text/javascript" src="/assets/js/jquery.fancybox.pack.js"></script>
+        <script src="js/do.js"></script>
+        <script>
+            $(document).ready(function (e) {
+
+                $('#audio').fancybox({
+                    fitToView: false,
+                    width: '680',
+                    height: '72',
+                    autoSize: true,
+                    closeClick: true
+                });
+
+                $("#latest").fancybox({
+                    maxWidth: 9999,
+                    maxHeight: 9999,
+                    fitToView: true,
+                    width: '100%',
+                    height: '100%',
+                    autoSize: false,
+                    closeClick: false
+                });
+
+                $(".audio").fancybox({
+                    fitToView: false,
+                    width: '670',
+                    height: '72',
+                    autoSize: true,
+                    closeClick: true
+                });
+
+            });
+        </script>
+    <style type="text/css">.fancybox-margin{margin-right:0px;}</style></head>
+    <body>
+
+        <div class="wrap">
+            <header>
+                <nav class="main" style="text-align: center;">
+                    <!--
+
+[DEBUG] FIN HTML OBTENIDO (selenium)
+
+Correo enviado a rfernandezdelrio@uc.cl (from: rodrigo@carvuk.com)

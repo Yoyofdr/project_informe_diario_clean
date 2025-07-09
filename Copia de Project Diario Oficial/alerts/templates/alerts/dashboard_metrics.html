@@ -1,0 +1,322 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Dashboard de Métricas - Diario Oficial{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .metrics-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .metric-value {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #417690;
+    }
+    .metric-label {
+        color: #666;
+        font-size: 0.9em;
+        text-transform: uppercase;
+    }
+    .status-success {
+        color: #70bf2b;
+    }
+    .status-error {
+        color: #ba2121;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin: 20px 0;
+    }
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .table-responsive {
+        overflow-x: auto;
+    }
+    .progress-bar {
+        background: #e9ecef;
+        border-radius: 4px;
+        height: 20px;
+        overflow: hidden;
+    }
+    .progress-fill {
+        background: #70bf2b;
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Dashboard de Métricas - Sistema de Scraping</h1>
+<p>Período: {{ fecha_inicio|date:"d/m/Y" }} - {{ fecha_fin|date:"d/m/Y" }}</p>
+
+<!-- Métricas Generales -->
+<div class="metrics-grid">
+    <div class="metrics-card">
+        <div class="metric-label">Total Ejecuciones</div>
+        <div class="metric-value">{{ metricas_generales.total_ejecuciones|default:"0" }}</div>
+    </div>
+    
+    <div class="metrics-card">
+        <div class="metric-label">Tasa de Éxito</div>
+        <div class="metric-value {% if metricas_generales.tasa_exito >= 95 %}status-success{% elif metricas_generales.tasa_exito < 80 %}status-error{% endif %}">
+            {{ metricas_generales.tasa_exito|floatformat:1 }}%
+        </div>
+    </div>
+    
+    <div class="metrics-card">
+        <div class="metric-label">Publicaciones Procesadas</div>
+        <div class="metric-value">{{ metricas_generales.total_publicaciones|default:"0" }}</div>
+    </div>
+    
+    <div class="metrics-card">
+        <div class="metric-label">Publicaciones Relevantes</div>
+        <div class="metric-value">{{ metricas_generales.total_relevantes|default:"0" }}</div>
+    </div>
+    
+    <div class="metrics-card">
+        <div class="metric-label">Duración Promedio</div>
+        <div class="metric-value">{{ metricas_generales.promedio_duracion|floatformat:1 }}s</div>
+    </div>
+    
+    <div class="metrics-card">
+        <div class="metric-label">Uso de Caché</div>
+        <div class="metric-value">{{ metricas_generales.promedio_pdfs_cache|floatformat:1|default:"0" }}%</div>
+    </div>
+</div>
+
+<!-- Gráficos -->
+<div class="metrics-card">
+    <h2>Publicaciones por Día</h2>
+    <div class="chart-container">
+        <canvas id="publicacionesChart"></canvas>
+    </div>
+</div>
+
+<div class="metrics-card">
+    <h2>Rendimiento Temporal</h2>
+    <div class="chart-container">
+        <canvas id="rendimientoChart"></canvas>
+    </div>
+</div>
+
+<!-- Métodos de Extracción -->
+<div class="metrics-card">
+    <h2>Métodos de Extracción de PDFs</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Método</th>
+                    <th>Cantidad</th>
+                    <th>Tiempo Promedio</th>
+                    <th>Porcentaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for metodo in metodos_extraccion %}
+                <tr>
+                    <td>{{ metodo.metodo_extraccion|default:"N/A" }}</td>
+                    <td>{{ metodo.cantidad }}</td>
+                    <td>{{ metodo.tiempo_promedio|floatformat:2|default:"N/A" }}s</td>
+                    <td>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {% widthratio metodo.cantidad metodos_extraccion.0.cantidad 100 %}%"></div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Uso de APIs -->
+<div class="metrics-card">
+    <h2>Uso de APIs Externas</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>API</th>
+                    <th>Total Llamadas</th>
+                    <th>Exitosas</th>
+                    <th>Tiempo Promedio</th>
+                    <th>Costo Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for api in apis_stats %}
+                <tr>
+                    <td>{{ api.api_name }}</td>
+                    <td>{{ api.total_llamadas }}</td>
+                    <td>{{ api.llamadas_exitosas }} ({% widthratio api.llamadas_exitosas api.total_llamadas 100 %}%)</td>
+                    <td>{{ api.tiempo_promedio|floatformat:2 }}s</td>
+                    <td>${{ api.costo_total|floatformat:4|default:"0" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Últimas Ejecuciones -->
+<div class="metrics-card">
+    <h2>Últimas Ejecuciones</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Duración</th>
+                    <th>Publicaciones</th>
+                    <th>Relevantes</th>
+                    <th>Caché</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ejecucion in ultimas_ejecuciones %}
+                <tr>
+                    <td>{{ ejecucion.fecha_scraping }}</td>
+                    <td>
+                        {% if ejecucion.exitoso %}
+                            <span class="status-success">✓ Exitoso</span>
+                        {% else %}
+                            <span class="status-error">✗ Error</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ ejecucion.duracion_segundos|floatformat:1 }}s</td>
+                    <td>{{ ejecucion.total_publicaciones }}</td>
+                    <td>{{ ejecucion.publicaciones_relevantes }}</td>
+                    <td>{{ ejecucion.tasa_cache|floatformat:0 }}%</td>
+                    <td>
+                        <a href="{% url 'alerts:detalle_ejecucion' ejecucion.id %}" class="button">Ver Detalle</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Errores Recientes -->
+{% if errores_recientes %}
+<div class="metrics-card">
+    <h2>Errores Recientes</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for error in errores_recientes %}
+                <tr>
+                    <td>{{ error.fecha_ejecucion|date:"d/m/Y H:i" }}</td>
+                    <td>{{ error.mensaje_error|truncatewords:20 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Gráfico de publicaciones por día
+const publicacionesData = {{ publicaciones_por_dia|safe }};
+const publicacionesCtx = document.getElementById('publicacionesChart').getContext('2d');
+new Chart(publicacionesCtx, {
+    type: 'line',
+    data: {
+        labels: publicacionesData.map(d => d.fecha_scraping),
+        datasets: [{
+            label: 'Total Publicaciones',
+            data: publicacionesData.map(d => d.total),
+            borderColor: '#417690',
+            backgroundColor: 'rgba(65, 118, 144, 0.1)',
+            tension: 0.1
+        }, {
+            label: 'Publicaciones Relevantes',
+            data: publicacionesData.map(d => d.relevantes),
+            borderColor: '#70bf2b',
+            backgroundColor: 'rgba(112, 191, 43, 0.1)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Gráfico de rendimiento
+const rendimientoData = {{ rendimiento_temporal|safe }};
+const rendimientoCtx = document.getElementById('rendimientoChart').getContext('2d');
+new Chart(rendimientoCtx, {
+    type: 'scatter',
+    data: {
+        datasets: [{
+            label: 'Tiempo de Ejecución',
+            data: rendimientoData.map((d, i) => ({
+                x: i,
+                y: d.duracion_segundos,
+                backgroundColor: d.exitoso ? '#70bf2b' : '#ba2121'
+            })),
+            pointBackgroundColor: rendimientoData.map(d => d.exitoso ? '#70bf2b' : '#ba2121'),
+            pointRadius: 5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Segundos'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Ejecuciones'
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        const data = rendimientoData[context.dataIndex];
+                        return `${data.fecha_ejecucion}: ${data.duracion_segundos}s (${data.exitoso ? 'Exitoso' : 'Error'})`;
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
