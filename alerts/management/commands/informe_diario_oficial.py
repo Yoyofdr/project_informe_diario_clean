@@ -11,10 +11,12 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--fecha', type=str, help='Fecha en formato dd-mm-aaaa (opcional)')
-        parser.add_argument('--test', action='store_true', help='Enviar un HTML mínimo de prueba')
+        parser.add_argument('--test', action='store_true', help='Modo test visual')
+        parser.add_argument('--force', action='store_true', help='Forzar refresco del scraping, ignorando caché')
 
     def handle(self, *args, **options):
         fecha = options.get('fecha')
+        force = options.get('force', False)
         from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@carvuk.com')
         destinatarios = Destinatario.objects.values_list('email', flat=True)
         if not destinatarios:
@@ -33,23 +35,22 @@ class Command(BaseCommand):
             ]
             valores_monedas = {'dolar': '950,00', 'euro': '1050,00'}
             total_documentos = 1
-            html = generar_informe_html(publicaciones, fecha, valores_monedas, documentos_analizados=total_documentos)
+            tiempo_lectura = max(1, total_documentos // 4)
+            html = generar_informe_html(publicaciones, fecha, valores_monedas, documentos_analizados=total_documentos, tiempo_lectura=tiempo_lectura)
             text = "Informe Diario Oficial (prueba): ver versión HTML."
         else:
-            resultados = obtener_sumario_diario_oficial(fecha)
-            publicaciones = resultados["publicaciones"]
-            valores_monedas = resultados["valores_monedas"]
-            total_documentos = resultados.get("total_documentos", None)
+            sumario = obtener_sumario_diario_oficial(fecha=fecha, force_refresh=force) if fecha else obtener_sumario_diario_oficial(force_refresh=force)
+            publicaciones = sumario["publicaciones"]
+            valores_monedas = sumario["valores_monedas"]
+            total_documentos = sumario.get("total_documentos", None)
             if total_documentos is None:
-                # Fallback: usar publicaciones si no está implementado en el scraper
                 total_documentos = len(publicaciones)
-            print("[DEBUG] total_documentos:", total_documentos)
-            # Si el scraping falla (no hay publicaciones y total_documentos es 0), NO enviar correo al cliente
+            tiempo_lectura = max(1, total_documentos // 4)
+            url_informe_completo = "https://informediario.cl/informe-completo"  # Puedes personalizar esto
             if not publicaciones and (total_documentos == 0 or total_documentos is None):
                 print("[INFO] Scraping falló o no hay contenido. No se enviará correo al cliente.")
-                return  # Salir sin enviar nada
-            html = generar_informe_html(publicaciones, fecha, valores_monedas, documentos_analizados=total_documentos)
-            print("[DEBUG] HTML generado:\n", html[:1000], "...\n[fin HTML]")
+                return
+            html = generar_informe_html(publicaciones, fecha, valores_monedas, documentos_analizados=total_documentos, tiempo_lectura=tiempo_lectura, url_informe_completo=url_informe_completo)
             text = f"Informe Diario Oficial {fecha or ''}: ver versión HTML."
 
         subject = f"Informe Diario Oficial - {fecha or datetime.now().strftime('%d-%m-%Y')}"

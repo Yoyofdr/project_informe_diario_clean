@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Diario Oficial - 17-07-2025</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .header .date {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .header .edition {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+        }
+        .stat {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            display: block;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        
+        /* Estilos para valores de monedas */
+        .currency-section {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .currency-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 15px;
+        }
+        .currency-values {
+            display: flex;
+            gap: 20px;
+        }
+        .currency-item {
+            flex: 1;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .currency-name {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        .currency-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #92400e;
+        }
+        
+        /* Estilos para secciones */
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-header {
+            background: #f9fafb;
+            border-left: 4px solid #3b82f6;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        .section-count {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+        
+        /* Estilos para publicaciones */
+        .publication {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+        }
+        .publication:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .publication-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .publication-title {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 16px;
+            line-height: 1.4;
+            flex: 1;
+        }
+        .publication-type {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            margin-left: 15px;
+        }
+        .publication-summary {
+            color: #4b5563;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .no-summary {
+            color: #9ca3af;
+            font-style: italic;
+        }
+        
+        /* Publicaciones relevantes */
+        .publication.relevante {
+            border-left: 4px solid #3b82f6;
+            border-top-color: #3b82f6;
+        }
+        
+        /* Licitaciones */
+        .publication.licitacion {
+            border-left: 4px solid #10b981;
+        }
+        .publication.licitacion .publication-type {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .footer {
+            background: #f9fafb;
+            padding: 30px 40px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer-note {
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        /* Mensaje cuando no hay publicaciones */
+        .empty-section {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Informe Diario Oficial</h1>
+            <div class="date">Thursday 17 De July De 2025</div>
+            <div class="edition">Edición con criterios de relevancia nacional</div>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-value">22</span>
+                    <span class="stat-label">Documentos analizados</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">1</span>
+                    <span class="stat-label">Publicaciones relevantes</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+
+            <div class="currency-section">
+                <div class="currency-title">📊 Valores de Referencia del Día</div>
+                <div class="currency-values">
+                    <div class="currency-item">
+                        <div class="currency-name">Dólar Observado</div>
+                        <div class="currency-value">$965.65</div>
+                    </div>
+                    <div class="currency-item">
+                        <div class="currency-name">Euro</div>
+                        <div class="currency-value">$1120.24</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">NORMAS GENERALES</h2>
+                    <div class="section-count">1 publicacion</div>
+                </div>
+
+                <div class="publication relevante">
+                    <div class="publication-header">
+                        <div class="publication-title">Decreto exento número 221, de 2025.- Determina el componente variable para el cálculo del impuesto específico establecido en la ley N° 18.502</div>
+                        
+                    </div>
+                    <div class="publication-summary">
+                        El Ministerio de Hacienda de Chile, mediante el decreto exento número 221, establece los componentes variables para el cálculo del impuesto específico a los combustibles según la ley N° 18.502, aplicables a partir del 17 de julio de 2025, con tasas resultantes que incluyen, por ejemplo, 6,1925 UTM/m³ para gasolina de 93 octanos y 1,3171 UTM/m³ para petróleo diésel. Se determina que el componente variable se suma o resta al componente base establecido, y se publicará un informe técnico en la web institucional del Ministerio de Hacienda. Este decreto se fundamenta en diversas leyes y reglamentos relacionados con la estabilización de precios de combustibles y es firmado por el Ministro de Hacienda, Mario Marcel Cullell. Las tasas resultantes son cruciales para la regulación del mercado de combustibles en Chile y deben ser consideradas por los actores del sector.
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="footer">
+            <div>Este informe incluye únicamente publicaciones de alcance nacional o de impacto significativo.</div>
+            <div class="footer-note">Los criterios de relevancia se aplican para filtrar información de interés general.</div>
+        </div>
+    </div>
+</body>
+</html>

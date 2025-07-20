@@ -102,14 +102,31 @@ def landing(request):
     if request.method == 'POST':
         form = DestinatarioForm(request.POST)
         if form.is_valid():
-            form.save()
-            mensaje = f"Destinatario {form.cleaned_data['email']} agregado."
-            form = DestinatarioForm()  # Limpiar el form
+            destinatario = form.save(commit=False)
+            # Combinar nombre y apellido
+            nombre = form.cleaned_data.get('nombre', '')
+            apellido = form.cleaned_data.get('apellido', '')
+            destinatario.nombre = f"{nombre} {apellido}".strip()
+            
+            # Asignar organización por defecto (la primera que exista)
+            # En un caso real deberías tener una lógica específica para esto
+            org = Organizacion.objects.first()
+            if org:
+                destinatario.organizacion = org
+                destinatario.save()
+                mensaje = f"Registro exitoso. Te hemos agregado a la lista de destinatarios."
+                messages.success(request, mensaje)
+                form = DestinatarioForm()  # Limpiar el form
+            else:
+                messages.error(request, "No hay organizaciones disponibles. Contacta al administrador.")
         else:
-            mensaje = "Por favor, ingresa un email válido o el email ya está registrado."
+            if form.errors:
+                for field, errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, error)
     else:
         form = DestinatarioForm()
-    return render(request, 'landing.html', {'form': form, 'mensaje': mensaje})
+    return render(request, 'landing.html', {'form': form})
 
 @login_required
 def panel_organizacion(request):
@@ -129,12 +146,16 @@ def panel_organizacion(request):
             form = DestinatarioForm(request.POST, organizacion=organizacion)
             if form.is_valid():
                 destinatario = form.save(commit=False)
+                # Combinar nombre y apellido
+                nombre = form.cleaned_data.get('nombre', '')
+                apellido = form.cleaned_data.get('apellido', '')
+                destinatario.nombre = f"{nombre} {apellido}".strip()
                 destinatario.organizacion = organizacion
                 destinatario.save()
                 messages.success(request, f"Destinatario {form.cleaned_data['email']} agregado.")
                 form = DestinatarioForm(organizacion=organizacion)
-            else:
-                messages.error(request, 'Por favor, corrige los errores del formulario.')
+            # else:
+            #     messages.error(request, 'Por favor, corrige los errores del formulario.')
         elif 'eliminar' in request.POST:
             dest_id = request.POST.get('dest_id')
             Destinatario.objects.filter(id=dest_id, organizacion=organizacion).delete()
@@ -155,11 +176,15 @@ def registro_empresa_admin(request):
             user = User.objects.create_user(
                 username=form.cleaned_data['email'],
                 email=form.cleaned_data['email'],
-                password=form.cleaned_data['password1']
+                password=form.cleaned_data['password1'],
+                first_name=form.cleaned_data['nombre'],
+                last_name=form.cleaned_data['apellido']
             )
+            # Generar dominio basado en el email del administrador
+            email_dominio = form.cleaned_data['email'].split('@')[1]
             org = Organizacion.objects.create(
                 nombre=form.cleaned_data['nombre_empresa'],
-                dominio=form.cleaned_data['dominio'].lower().strip(),
+                dominio=email_dominio,
                 admin=user
             )
             messages.success(request, 'Registro exitoso. Ahora puedes iniciar sesión.')
@@ -173,6 +198,7 @@ def registro_empresa_admin(request):
 def login_email(request):
     from django.contrib.auth import authenticate
     from django.contrib.auth import login as auth_login
+    from django.core.exceptions import MultipleObjectsReturned
     mensaje = None
     if request.method == 'POST':
         email = request.POST.get('email', '').strip()
@@ -185,6 +211,10 @@ def login_email(request):
         except User.DoesNotExist:
             print(f"[LOGIN] No existe usuario con email: {email}")
             messages.error(request, "No existe un usuario con ese email.")
+            return render(request, 'registration/login.html')
+        except MultipleObjectsReturned:
+            print(f"[LOGIN] ERROR: Hay múltiples usuarios con el email: {email}")
+            messages.error(request, "Error: Hay más de un usuario registrado con este email. Por favor contacta a soporte.")
             return render(request, 'registration/login.html')
         user_auth = authenticate(request, username=user.username, password=password)
         print(f"[LOGIN] Resultado authenticate: {user_auth}")
@@ -245,6 +275,7 @@ def registro_prueba(request):
                 )
                 for dest_email in destinatarios:
                     Destinatario.objects.create(
+                        nombre=f"{nombre} {apellido}",  # Usar el nombre del admin como placeholder
                         email=dest_email,
                         organizacion=org
                     )

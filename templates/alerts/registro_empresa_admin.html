@@ -1,53 +1,78 @@
 {% extends 'alerts/base.html' %}
 {% block content %}
-<div style="max-width: 420px; margin: 40px auto; background: #fff; border-radius: 14px; box-shadow: 0 2px 16px #0002; padding: 32px 28px 24px 28px;">
-    <h2 style="font-size:2em; font-weight:700; margin-bottom:10px; text-align:center;">Registro de Empresa y Administrador</h2>
-    <div style="color:#444; font-size:1.08em; margin-bottom:22px; text-align:center;">Crea tu cuenta de empresa para recibir el informe diario automáticamente en los correos de tu organización.</div>
-    <form method="post" autocomplete="off">
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-            <div style="background:#ffe0e0; color:#a00; border-radius:6px; padding:10px 14px; margin-bottom:16px; font-size:1em;">
-                {% for error in form.non_field_errors %}
-                    <div>{{ error }}</div>
-                {% endfor %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-12">
+            <div class="card p-4 shadow-sm">
+                <h2 class="mb-2">Registro de Empresa y Administrador</h2>
+                <p class="mb-4 text-muted">Crea tu cuenta de empresa para recibir el informe diario automáticamente en los correos de tu organización.</p>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {% for error in form.non_field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                    </div>
+                {% endif %}
+                <form method="post" autocomplete="off" class="mb-3">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.nombre.label }}</label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="text-danger">{{ form.nombre.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.apellido.id_for_label }}" class="form-label">{{ form.apellido.label }}</label>
+                        {{ form.apellido }}
+                        {% if form.apellido.errors %}
+                            <div class="text-danger">{{ form.apellido.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.nombre_empresa.id_for_label }}" class="form-label">{{ form.nombre_empresa.label }}</label>
+                        {{ form.nombre_empresa }}
+                        {% if form.nombre_empresa.errors %}
+                            <div class="text-danger">{{ form.nombre_empresa.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">{{ form.password1.label }}</label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <div class="text-danger">{{ form.password1.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">{{ form.password2.label }}</label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <div class="text-danger">{{ form.password2.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Registrar</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="/" class="text-decoration-none">← Volver al inicio</a>
+                </div>
             </div>
-        {% endif %}
-        <div style="margin-bottom:18px;">
-            <label for="id_nombre_empresa" style="font-weight:500; margin-bottom:4px; display:block;">Nombre de la empresa</label>
-            {{ form.nombre_empresa }}
-            {% if form.nombre_empresa.errors %}
-                <div style="color:#b00; font-size:0.98em; margin-top:2px;">{{ form.nombre_empresa.errors.0 }}</div>
-            {% endif %}
         </div>
-        <div style="margin-bottom:18px;">
-            <label for="id_dominio" style="font-weight:500; margin-bottom:4px; display:block;">Dominio autorizado</label>
-            {{ form.dominio }}
-            {% if form.dominio.errors %}
-                <div style="color:#b00; font-size:0.98em; margin-top:2px;">{{ form.dominio.errors.0 }}</div>
-            {% endif %}
-        </div>
-        <div style="margin-bottom:18px;">
-            <label for="id_email" style="font-weight:500; margin-bottom:4px; display:block;">Email del administrador</label>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div style="color:#b00; font-size:0.98em; margin-top:2px;">{{ form.email.errors.0 }}</div>
-            {% endif %}
-        </div>
-        <div style="margin-bottom:18px;">
-            <label for="id_password1" style="font-weight:500; margin-bottom:4px; display:block;">Contraseña</label>
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <div style="color:#b00; font-size:0.98em; margin-top:2px;">{{ form.password1.errors.0 }}</div>
-            {% endif %}
-        </div>
-        <div style="margin-bottom:24px;">
-            <label for="id_password2" style="font-weight:500; margin-bottom:4px; display:block;">Confirmar contraseña</label>
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <div style="color:#b00; font-size:0.98em; margin-top:2px;">{{ form.password2.errors.0 }}</div>
-            {% endif %}
-        </div>
-        <button type="submit" style="width:100%; padding:12px 0; border-radius:7px; background:#4b0082; color:#fff; font-size:1.15em; font-weight:600; border:none; box-shadow:0 1px 4px #0001; transition:background 0.2s;">Registrar</button>
-    </form>
+    </div>
 </div>
 {% endblock %} 

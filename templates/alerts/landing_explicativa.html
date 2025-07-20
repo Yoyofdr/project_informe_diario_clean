@@ -7,296 +7,469 @@
     <meta property="og:description" content="Recibe cada mañana un resumen claro y útil del Diario Oficial de Chile, explicado en simple y directo a tu correo." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://informediario.cl/" />
-    <meta property="og:image" content="https://dummyimage.com/600x250/ededed/888&text=Informe+Diario+Ejemplo" />
+    <meta property="og:image" content="https://informediario.cl/static/img/ejemplo_informe_12_julio.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Lucide Icons -->
+    <link rel="stylesheet" href="https://unpkg.com/lucide@0.263.0/dist/lucide.css">
 {% endblock %}
 {% block content %}
 <style>
-    body, .bg-landing {
-        background: #fff !important;
+    body {
+        background: linear-gradient(to bottom right, #f9fafb, #dbeafe, #e0e7ff) !important;
+        min-height: 100vh;
     }
     .navbar-brand { display: none !important; }
-    .hero-bg {
+    
+    /* Modern Hero Section */
+    .modern-hero {
         position: relative;
-        background: #fff;
         overflow: hidden;
+        padding: 5rem 0 3rem 0;
     }
-    .hero-bg::before {
+    .modern-hero::before {
         content: '';
         position: absolute;
-        top: -30vw;
-        left: -30vw;
-        width: 80vw;
-        height: 80vw;
-        background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, rgba(168,180,255,0.10) 60%, transparent 100%);
-        z-index: 1;
-        pointer-events: none;
+        top: -10rem;
+        left: -10rem;
+        width: 20rem;
+        height: 20rem;
+        background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(168,180,255,0.2) 60%, transparent 100%);
+        filter: blur(48px);
     }
-    .hero-bg::after {
+    .modern-hero::after {
         content: '';
         position: absolute;
-        bottom: -25vw;
-        right: -25vw;
-        width: 60vw;
-        height: 60vw;
-        background: radial-gradient(circle, rgba(129,140,248,0.13) 0%, rgba(241,245,249,0.08) 80%, transparent 100%);
-        z-index: 1;
-        pointer-events: none;
+        bottom: -10rem;
+        right: -10rem;
+        width: 24rem;
+        height: 24rem;
+        background: radial-gradient(circle, rgba(129,140,248,0.2) 0%, rgba(241,245,249,0.1) 80%, transparent 100%);
+        filter: blur(48px);
     }
-    .hero-bg > .lovable-hero-container {
+    .hero-card {
+        background: linear-gradient(to bottom right, #000000, #1f2937, #374151);
+        border-radius: 1.5rem;
+        padding: 3rem;
         position: relative;
-        z-index: 2;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
-    .lovable-hero-container {
-        position: relative;
-        z-index: 2;
-        background: #fff;
-        border-radius: 2.5rem;
-        box-shadow: 0 8px 32px 0 rgba(37,99,235,0.07);
-        padding: 4.5rem 2rem 3.5rem 2rem;
-        max-width: 1100px;
-        margin: 2.5rem auto 0 auto;
+    .hero-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to right, rgba(55,65,81,0.3), rgba(0,0,0,0.2));
     }
-    .lovable-hero-content {
-        position: relative;
-        z-index: 2;
-    }
-    .lovable-badge {
+    .modern-badge {
+        background: linear-gradient(to right, #dbeafe, #e0e7ff);
+        color: #1e40af;
+        padding: 0.5rem 1.5rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
         display: inline-block;
-        background: #e8f0fe;
-        color: #2563eb;
-        border-radius: 999px;
-        font-size: 1em;
-        padding: 0.35em 1.1em;
-        font-weight: 500;
-        box-shadow: 0 1px 4px 0 rgba(37,99,235,0.07);
-        border: 1px solid #dbeafe;
         margin-bottom: 1.5rem;
     }
-    .lovable-headline {
-        font-size: 3.2rem;
-        font-weight: 800;
-        color: #1e293b;
-        letter-spacing: -1px;
-        margin-bottom: 0.5rem;
+    .modern-headline {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #ffffff;
+        letter-spacing: -0.025em;
+        margin-bottom: 1rem;
     }
-    .lovable-sub {
+    .modern-subtitle {
         font-size: 1.5rem;
-        color: #334155;
+        color: #e5e7eb;
         font-weight: 500;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
     }
-    .lovable-highlight {
-        color: #2563eb;
+    .modern-highlight {
+        color: #60a5fa;
         font-weight: 700;
     }
-    .lovable-btn-main {
-        background: #2563eb;
-        color: #fff;
-        font-size: 1.2em;
+    .modern-btn-primary {
+        background: linear-gradient(to right, #2563eb, #1d4ed8);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 0.75rem;
         font-weight: 600;
-        border-radius: 0.7em;
-        padding: 0.9em 2.5em;
-        box-shadow: 0 2px 16px 0 rgba(37,99,235,0.10);
-        border: none;
-        margin-right: 1.2em;
-        transition: background 0.2s;
+        font-size: 1.125rem;
+        box-shadow: 0 10px 15px -3px rgba(37,99,235,0.1), 0 4px 6px -2px rgba(37,99,235,0.05);
+        transform: translateY(0);
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
     }
-    .lovable-btn-main:hover {
-        background: #1d4ed8;
+    .modern-btn-primary:hover {
+        background: linear-gradient(to right, #1d4ed8, #1e40af);
+        color: white;
+        transform: translateY(-4px);
+        box-shadow: 0 20px 25px -5px rgba(37,99,235,0.1), 0 10px 10px -5px rgba(37,99,235,0.04);
     }
-    .lovable-btn-outline {
-        background: #fff;
-        color: #1e293b;
-        font-size: 1.2em;
+    .modern-btn-secondary {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(8px);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 0.75rem;
         font-weight: 600;
-        border-radius: 0.7em;
-        padding: 0.9em 2.5em;
-        border: 2px solid #e0eaff;
-        box-shadow: 0 2px 16px 0 rgba(37,99,235,0.04);
-        transition: border 0.2s;
+        font-size: 1.125rem;
+        border: 2px solid rgba(255,255,255,0.2);
+        transform: translateY(0);
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
     }
-    .lovable-btn-outline:hover {
-        border: 2px solid #2563eb;
-        color: #2563eb;
+    .modern-btn-secondary:hover {
+        background: rgba(255,255,255,0.2);
+        border-color: rgba(255,255,255,0.4);
+        color: white;
+        transform: translateY(-4px);
     }
-    .lovable-promises {
-        margin-top: 2.5rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 2.5rem;
+    
+    /* Benefits Section */
+    .benefits-section {
+        background: linear-gradient(to right, #dbeafe, #e0e7ff);
+        border-top: 1px solid #bfdbfe;
+        border-bottom: 1px solid #bfdbfe;
+        padding: 5rem 0;
     }
-    .lovable-promise {
+    .benefit-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    .benefit-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.25rem;
+        background: linear-gradient(to right, #3b82f6, #6366f1);
+        transform: scaleX(0);
+        transition: transform 0.3s;
+    }
+    .benefit-card:hover {
+        border-color: #60a5fa;
+        box-shadow: 0 20px 25px -5px rgba(59,130,246,0.1), 0 10px 10px -5px rgba(59,130,246,0.04);
+        transform: translateY(-8px);
+    }
+    .benefit-card:hover::before {
+        transform: scaleX(1);
+    }
+    .benefit-icon-wrapper {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 1rem;
         display: flex;
         align-items: center;
-        font-size: 1.1em;
-        color: #059669;
-        font-weight: 500;
-        gap: 0.5em;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
     }
-    .lovable-example-card {
-        background: #fff;
-        border-radius: 1.5em;
-        box-shadow: 0 8px 32px 0 rgba(37,99,235,0.10);
-        padding: 2.5em 2em 2em 2em;
-        max-width: 600px;
+    .benefit-icon {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    /* Example Section */
+    .example-section {
+        background: white;
+        padding: 5rem 0;
+    }
+    .example-wrapper {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    }
+    .newsletter-preview {
+        max-width: 40rem;
         margin: 0 auto;
-        margin-top: 2.5em;
+        background: white;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        overflow: hidden;
     }
-    .lovable-example-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 0.5em;
-    }
-    .lovable-example-sub {
-        color: #64748b;
-        font-size: 1.1em;
-        margin-bottom: 1.5em;
-    }
-    @media (max-width: 600px) {
-        .lovable-headline { font-size: 2.1rem; }
-        .lovable-sub { font-size: 1.1rem; }
-        .lovable-example-title { font-size: 1.3rem; }
-        .lovable-example-card { padding: 1.2em 0.7em; }
-    }
-    .hero-bg-landing {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #fff 0%, #e0eaff 40%, #f1f5ff 100%);
+    .newsletter-header {
+        background: linear-gradient(to bottom right, #000000, #1f2937, #374151);
+        padding: 3rem 2rem;
+        text-align: center;
         position: relative;
         overflow: hidden;
     }
-    .hero-bg-landing::before {
+    .newsletter-header::before {
         content: '';
         position: absolute;
-        top: -180px;
-        left: -180px;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(59,130,246,0.13) 0%, rgba(168,180,255,0.07) 60%, transparent 100%);
-        z-index: 1;
-        pointer-events: none;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to right, rgba(55,65,81,0.3), rgba(0,0,0,0.2));
     }
-    .hero-bg-landing::after {
-        content: '';
-        position: absolute;
-        bottom: -160px;
-        right: -160px;
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(circle, rgba(129,140,248,0.10) 0%, rgba(241,245,249,0.06) 80%, transparent 100%);
-        z-index: 1;
-        pointer-events: none;
+    .newsletter-stats {
+        background: linear-gradient(to right, #dbeafe, #e0e7ff);
+        border-bottom: 1px solid #bfdbfe;
     }
-    .hero-content {
-        position: relative;
-        z-index: 2;
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 5rem 1.5rem 3rem 1.5rem;
+    .stat-item {
+        padding: 1.5rem;
         text-align: center;
+        position: relative;
+    }
+    .stat-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #2563eb;
+        margin-bottom: 0.5rem;
+    }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e40af;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
+    .stat-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #2563eb;
+    }
+    .newsletter-content {
+        padding: 2rem;
+    }
+    .content-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #dbeafe;
+    }
+    .content-icon-wrapper {
+        width: 2.5rem;
+        height: 2.5rem;
+        background: linear-gradient(to bottom right, #dbeafe, #e0e7ff);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
+    .publication-item {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .publication-title {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.75rem;
+        line-height: 1.5;
+    }
+    .publication-summary {
+        color: #64748b;
+        font-size: 0.875rem;
+        line-height: 1.625;
+    }
+    
+    /* Modern Footer */
+    .modern-footer {
+        background: linear-gradient(to bottom right, #111827, #1f2937, #000000);
+        color: white;
+        padding: 4rem 0 2rem 0;
+        margin-top: 5rem;
+        border-radius: 1.5rem 1.5rem 0 0;
+    }
+    
+    @media (max-width: 768px) {
+        .modern-headline { font-size: 2rem; }
+        .modern-subtitle { font-size: 1.125rem; }
+        .hero-card { padding: 2rem; }
+        .benefit-card { padding: 1.5rem; }
     }
 </style>
-<!-- Hero Section clásica con degradado inicial y layout Bootstrap -->
-<div class="hero-bg py-5 rounded-4">
-    <div class="lovable-hero-container text-center">
-        <span class="lovable-badge">✨ Nuevo: Análisis con IA incluido</span>
-        <h1 class="lovable-headline">Informe Diario</h1>
-        <div class="lovable-sub">El resumen diario del Diario Oficial, <span class="lovable-highlight">explicado en simple</span></div>
-        <div class="mb-4" style="color:#475569; font-size:1.15em; max-width:600px; margin:0 auto;">
-            Recibe solo lo relevante, directo a tu correo, sin tecnicismos ni ruido. Ahorra tiempo y mantente informado de lo que realmente importa.
-        </div>
-        <div class="d-flex flex-column flex-md-row justify-content-center align-items-center mb-2" style="gap:1.2em;">
-            <a href="/registro-prueba/" class="lovable-btn-main">Comenzar gratis</a>
-            <a href="/login/" class="lovable-btn-outline">Iniciar sesión</a>
+<!-- Modern Hero Section -->
+<div class="modern-hero">
+    <div class="container">
+        <div class="hero-card text-center">
+            <span class="modern-badge">✨ Nuevo: Análisis con IA incluido</span>
+            <h1 class="modern-headline">Informe Diario</h1>
+            <div class="modern-subtitle">El resumen diario del Diario Oficial, <span class="modern-highlight">explicado en simple</span></div>
+            <p class="mb-5" style="color: #e5e7eb; font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+                Recibe solo lo relevante, directo a tu correo, sin tecnicismos ni ruido. Ahorra tiempo y mantente informado de lo que realmente importa.
+            </p>
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center" style="gap: 1rem; position: relative; z-index: 10;">
+                <a href="/registro-prueba/" class="modern-btn-primary">Comenzar gratis</a>
+                <a href="/login/" class="modern-btn-secondary">Iniciar sesión</a>
+            </div>
         </div>
     </div>
 </div>
-<!-- Nueva sección de beneficios -->
-<section class="py-5" style="background: #f8fafc;">
+<!-- Benefits Section -->
+<section class="benefits-section">
   <div class="container">
     <div class="text-center mb-5">
-      <h2 class="fw-bold" style="font-size:2.2rem; color:#1e293b;">¿Por qué elegir Informe Diario?</h2>
-      <p class="text-secondary" style="font-size:1.15rem; max-width:600px; margin:0 auto;">Diseñado para profesionales que necesitan estar informados sin perder tiempo</p>
+      <h2 class="fw-bold" style="font-size: 2.5rem; color: #1e293b;">¿Por qué elegir Informe Diario?</h2>
+      <p class="text-muted" style="font-size: 1.25rem; max-width: 600px; margin: 0 auto;">Diseñado para profesionales que necesitan estar informados sin perder tiempo</p>
     </div>
     <div class="row g-4 justify-content-center">
       <div class="col-12 col-md-6 col-lg-3">
-        <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-          <div style="background:#fef9c3; border-radius:1em; width:3.5em; height:3.5em; display:flex; align-items:center; justify-content:center; margin:0 auto 1em auto;">
-            <span style="font-size:2em; color:#fbbf24;">⏰</span>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #fef3c7, #fde68a);">
+            <svg class="benefit-icon" style="color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
           </div>
-          <h5 class="fw-bold mb-2" style="color:#1e293b;">Ahorra tiempo</h5>
-          <p class="text-secondary mb-0">Olvídate de leer documentos extensos. Te entregamos solo lo esencial en 5 minutos de lectura.</p>
+          <h5 class="fw-bold mb-3" style="color: #1e293b;">Ahorra tiempo</h5>
+          <p class="text-muted mb-0">Olvídate de leer documentos extensos. Te entregamos solo lo esencial en 5 minutos de lectura.</p>
         </div>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-          <div style="background:#dcfce7; border-radius:1em; width:3.5em; height:3.5em; display:flex; align-items:center; justify-content:center; margin:0 auto 1em auto;">
-            <span style="font-size:2em; color:#22c55e;">📈</span>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #d1fae5, #a7f3d0);">
+            <svg class="benefit-icon" style="color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
           </div>
-          <h5 class="fw-bold mb-2" style="color:#1e293b;">Información clave</h5>
-          <p class="text-secondary mb-0">Identificamos y explicamos los hechos más importantes del día con análisis inteligente.</p>
+          <h5 class="fw-bold mb-3" style="color: #1e293b;">Información clave</h5>
+          <p class="text-muted mb-0">Identificamos y explicamos los hechos más importantes del día con análisis inteligente.</p>
         </div>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-          <div style="background:#e0e7ff; border-radius:1em; width:3.5em; height:3.5em; display:flex; align-items:center; justify-content:center; margin:0 auto 1em auto;">
-            <span style="font-size:2em; color:#2563eb;">📧</span>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #dbeafe, #bfdbfe);">
+            <svg class="benefit-icon" style="color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
           </div>
-          <h5 class="fw-bold mb-2" style="color:#1e293b;">Directo a tu correo</h5>
-          <p class="text-secondary mb-0">Recibe el informe cada mañana en tu bandeja de entrada, optimizado para móvil.</p>
+          <h5 class="fw-bold mb-3" style="color: #1e293b;">Directo a tu correo</h5>
+          <p class="text-muted mb-0">Recibe el informe cada mañana en tu bandeja de entrada, optimizado para móvil.</p>
         </div>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <div class="bg-white rounded-4 shadow-sm p-4 h-100 text-center">
-          <div style="background:#f3e8ff; border-radius:1em; width:3.5em; height:3.5em; display:flex; align-items:center; justify-content:center; margin:0 auto 1em auto;">
-            <span style="font-size:2em; color:#a21caf;">⚡️</span>
+        <div class="benefit-card">
+          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #ede9fe, #ddd6fe);">
+            <svg class="benefit-icon" style="color: #8b5cf6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
           </div>
-          <h5 class="fw-bold mb-2" style="color:#1e293b;">Análisis con IA</h5>
-          <p class="text-secondary mb-0">Utilizamos inteligencia artificial para detectar patrones y tendencias importantes.</p>
+          <h5 class="fw-bold mb-3" style="color: #1e293b;">Análisis con IA</h5>
+          <p class="text-muted mb-0">Utilizamos inteligencia artificial para detectar patrones y tendencias importantes.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
-<!-- Sección de ejemplo de informe clásica -->
-<section id="ejemplo" class="py-5 bg-white">
-  <div class="mx-auto max-w-2xl px-4 text-center mb-4">
-    <h2 class="text-3xl font-extrabold mb-2">Así se ve tu informe diario</h2>
-    <p class="text-lg text-slate-500 mb-4">Información clara, organizada y fácil de entender</p>
-  </div>
-  <div class="mx-auto max-w-3xl px-4">
-    <div class="bg-white rounded-3xl shadow-xl p-6 flex flex-col items-center">
-      <img src="https://dummyimage.com/600x250/ededed/888&text=Informe+Diario+Ejemplo" alt="Ejemplo de informe diario enviado por correo electrónico" class="rounded-xl shadow-md w-full max-w-2xl mb-2">
+<!-- Example Section -->
+<section id="ejemplo" class="example-section">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold" style="font-size: 2.5rem; color: #1e293b;">Así se ve tu informe diario</h2>
+      <p class="text-muted" style="font-size: 1.25rem;">Información clara, organizada y fácil de entender</p>
+    </div>
+    <div class="example-wrapper">
+      <div class="newsletter-preview">
+        <!-- Email Header -->
+        <div class="newsletter-header">
+          <h3 class="text-white fw-bold mb-2" style="position: relative; z-index: 1; font-size: 2rem;">Diario Oficial</h3>
+          <p class="text-white mb-0" style="position: relative; z-index: 1; opacity: 0.9;">12 de julio de 2025</p>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="newsletter-stats">
+          <div class="row g-0">
+            <div class="col-6">
+              <div class="stat-item">
+                <svg class="stat-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <div class="stat-number">13</div>
+                <div class="stat-label">Total documentos</div>
+              </div>
+            </div>
+            <div class="col-6 border-start">
+              <div class="stat-item">
+                <svg class="stat-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="stat-number">2</div>
+                <div class="stat-label">Relevantes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Content Preview -->
+        <div class="newsletter-content">
+          <div class="content-header">
+            <div class="content-icon-wrapper">
+              <svg style="width: 1.25rem; height: 1.25rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+              </svg>
+            </div>
+            <h4 class="mb-0 fw-semibold" style="color: #1e293b;">Normas Generales</h4>
+          </div>
+          
+          <div class="publication-item">
+            <h5 class="publication-title">Decreto número 662, de 2024.- Aprueba Reglamento de la ley sobre la economía circular</h5>
+            <p class="publication-summary">El Ministerio del Medio Ambiente aprobó el reglamento que busca fomentar la reutilización de recursos y el cuidado del medio ambiente...</p>
+            <a href="#" class="btn btn-sm btn-primary mt-2" style="background: #3b82f6; border: none;">
+              <svg style="width: 1rem; height: 1rem; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              Ver documento oficial
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <p class="text-center text-muted mt-4">
+        <small>Vista previa del informe del 12 de julio de 2025</small><br>
+        <small>13 documentos analizados • 2 relevantes seleccionados • Enlaces directos a PDFs oficiales</small>
+      </p>
     </div>
   </div>
 </section>
-<!-- Footer adaptado -->
-<footer class="bg-primary text-white py-5 mt-5 rounded-4">
+<!-- Modern Footer -->
+<footer class="modern-footer">
     <div class="container">
         <div class="row g-4">
             <div class="col-md-6">
-                <h4 class="fw-bold mb-2">Informe Diario</h4>
-                <p class="mb-0">Resúmenes claros y útiles del Diario Oficial, directo a tu correo.</p>
+                <h4 class="fw-bold mb-3">Informe Diario</h4>
+                <p class="mb-0" style="color: #e5e7eb;">Resúmenes claros y útiles del Diario Oficial, directo a tu correo.</p>
             </div>
             <div class="col-md-3">
-                <h6 class="fw-semibold mb-2">Enlaces</h6>
+                <h6 class="fw-semibold mb-3" style="color: #f3f4f6;">Enlaces</h6>
                 <ul class="list-unstyled mb-0">
-                    <li><a href="/" class="text-white text-decoration-none">Inicio</a></li>
-                    <li><a href="/registro-prueba/" class="text-white text-decoration-none">Registro</a></li>
-                    <li><a href="/login/" class="text-white text-decoration-none">Iniciar sesión</a></li>
+                    <li class="mb-2"><a href="/" class="text-decoration-none" style="color: #e5e7eb; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#e5e7eb'">Inicio</a></li>
+                    <li class="mb-2"><a href="/registro-prueba/" class="text-decoration-none" style="color: #e5e7eb; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#e5e7eb'">Registro</a></li>
+                    <li class="mb-2"><a href="/login/" class="text-decoration-none" style="color: #e5e7eb; transition: color 0.2s;" onmouseover="this.style.color='#60a5fa'" onmouseout="this.style.color='#e5e7eb'">Iniciar sesión</a></li>
                 </ul>
             </div>
             <div class="col-md-3">
-                <h6 class="fw-semibold mb-2">Contacto</h6>
+                <h6 class="fw-semibold mb-3" style="color: #f3f4f6;">Contacto</h6>
                 <ul class="list-unstyled mb-0">
-                    <li>contacto@informediario.cl</li>
+                    <li style="color: #e5e7eb;">contacto@informediario.cl</li>
                 </ul>
             </div>
         </div>
-        <hr class="border-light my-4">
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+        <div class="text-center">
+            <p class="mb-0" style="color: #9ca3af; font-size: 0.875rem;">© 2025 Informe Diario. Todos los derechos reservados.</p>
+        </div>
     </div>
 </footer>
 {% endblock %} 

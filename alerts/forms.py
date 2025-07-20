@@ -11,18 +11,31 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email')
 
 class DestinatarioForm(forms.ModelForm):
+    apellido = forms.CharField(max_length=100, required=True, label="Apellido")
+    
     def __init__(self, *args, organizacion=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.organizacion = organizacion
+        # Aplicar estilo consistente a todos los campos
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
     class Meta:
         model = Destinatario
-        fields = ['email']
+        fields = ['nombre', 'email']
         widgets = {
+            'nombre': forms.TextInput(attrs={
+                'required': True,
+                'placeholder': 'Tu nombre'
+            }),
             'email': forms.EmailInput(attrs={
                 'required': True,
-                'style': 'width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:14px; font-size:1em;'
+                'placeholder': 'tu@email.com'
             })
+        }
+        labels = {
+            'nombre': 'Nombre',
+            'email': 'Correo electrónico'
         }
 
     def clean_email(self):
@@ -33,16 +46,23 @@ class DestinatarioForm(forms.ModelForm):
             dominio_autorizado = self.organizacion.dominio.lower().strip()
             if not email.endswith(f"@{dominio_autorizado}"):
                 raise forms.ValidationError(
-                    f"No puedes agregar usuarios fuera de tu organización. Solo se permiten correos con el dominio @{dominio_autorizado}"
+                    "Solo puedes agregar destinatarios que pertenezcan a tu organización"
                 )
         return email
 
 class RegistroEmpresaAdminForm(forms.Form):
+    nombre = forms.CharField(label="Nombre", max_length=100)
+    apellido = forms.CharField(label="Apellido", max_length=100)
+    email = forms.EmailField(label="Email")
     nombre_empresa = forms.CharField(label="Nombre de la empresa", max_length=200)
-    dominio = forms.CharField(label="Dominio autorizado (ej: empresa.com)", max_length=80)
-    email = forms.EmailField(label="Email del administrador")
     password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Aplicar estilo consistente a todos los campos
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
     def clean(self):
         cleaned_data = super().clean()
@@ -52,8 +72,6 @@ class RegistroEmpresaAdminForm(forms.Form):
             self.add_error('password2', "Las contraseñas no coinciden.")
         if User.objects.filter(email=cleaned_data.get("email")).exists():
             self.add_error('email', "Ese email ya está registrado.")
-        if Organizacion.objects.filter(dominio=cleaned_data.get("dominio")).exists():
-            self.add_error('dominio', "Ese dominio ya está registrado para otra empresa.")
         return cleaned_data
 
 class EmailAuthenticationForm(forms.Form):

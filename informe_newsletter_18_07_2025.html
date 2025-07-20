@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Diario Oficial • 18-07-2025</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 48px 32px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+        
+        .date {
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Quick Stats */
+        .stats-container {
+            padding: 24px 32px;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 3px solid #e2e8f0;
+        }
+        
+        .stat {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        
+        /* Main Content */
+        .content {
+            padding: 32px;
+        }
+        
+        /* Section Headers */
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .section-emoji {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            flex: 1;
+        }
+        
+        .section-count {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* Publications */
+        .publication {
+            background-color: #f9fafb;
+            border-left: 4px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .publication:hover {
+            border-left-color: #3b82f6;
+            background-color: #f3f4f6;
+        }
+        
+        .pub-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .pub-summary {
+            font-size: 14px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+        
+        .badge-licitacion {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* Currency Section */
+        .currency-section {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            padding: 32px;
+            margin: 32px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .currency-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .currency-grid {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+        }
+        
+        .currency-item {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 16px 24px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .currency-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .currency-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 32px;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+        
+        .empty-text {
+            font-size: 16px;
+            color: #6b7280;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #f3f4f6;
+            padding: 32px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .footer-text {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 32px 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header {
+                padding: 32px 20px;
+            }
+            
+            .logo {
+                font-size: 28px;
+            }
+            
+            .stats-container {
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 28px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .currency-grid {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .currency-section {
+                margin: 20px;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">📰 Diario Oficial</div>
+            <div class="date">FRIDAY, 18 DE JULY DE 2025</div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="stats-container">
+            <div class="stat">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Analizados</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Relevantes</div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-emoji">⚖️</span>
+                    <h2 class="section-title">Normas Generales</h2>
+                    <span class="section-count">1</span>
+                </div>
+
+                <div class="publication" style="border-left-color: #059669;">
+                    <h3 class="pub-title">
+                        Resolución exenta número 244, de 2025.- Instruye un procedimiento administrativo para iniciar el proceso de consulta previa de las medidas que indica, y convoca a las instituciones representativas del pueblo mapuche en las regiones del Biobío, La Araucanía, Los Ríos y Los Lagos
+                        
+                    </h3>
+                    <p class="pub-summary">
+                        La resolución exenta número 244 del 27 de junio de 2025 instruye un procedimiento administrativo para iniciar un proceso de consulta previa sobre un nuevo sistema de tierras para las comunidades y organizaciones indígenas Mapuche en las regiones del Biobío, La Araucanía, Los Ríos y Los Lagos, convocando a las instituciones representativas del pueblo Mapuche a una reunión de planificación. Este proceso se fundamenta en la ley Nº 19.253 y el Convenio Nº 169 de la OIT, y busca garantizar la participación efectiva de las comunidades afectadas, asegurando que las medidas propuestas respeten sus tradiciones y derechos. La resolución establece la creación de un expediente administrativo y la publicación de la misma en el Diario Oficial y en los portales de transparencia correspondientes. Se requiere que el proceso de consulta se realice de buena fe y de manera apropiada, cumpliendo con los principios internacionales sobre derechos humanos de los pueblos indígenas.
+                    </p>
+                </div>
+
+            </div>
+<div class="divider"></div>
+
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-emoji">📢</span>
+                    <h2 class="section-title">Avisos Destacados</h2>
+                    <span class="section-count">1</span>
+                </div>
+
+                <div class="publication" style="border-left-color: #dc2626;">
+                    <h3 class="pub-title">
+                        Fomento a la inversión privada en obras de riego y drenaje ley N° 18.450
+                        
+                    </h3>
+                    <p class="pub-summary">
+                        La Comisión Nacional de Riego del Ministerio de Agricultura de Chile informa sobre los resultados del "Primer concurso de obras civiles del sur", correspondiente al Concurso N° 05-2025, cuyos puntajes de proyectos admitidos y no admitidos se publicarán en su sitio web el 18 de julio de 2025. Los postulantes deben estar atentos a esta fecha para consultar los resultados y cumplir con los requisitos establecidos por la ley N° 18.450 para la inversión privada en obras de riego y drenaje.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Currency Values -->
+        <div class="currency-section">
+            <h3 class="currency-title">💱 Valores del Día</h3>
+            <div class="currency-grid">
+                <div class="currency-item">
+                    <div class="currency-name">USD</div>
+                    <div class="currency-value">$966.78</div>
+                </div>
+                <div class="currency-item">
+                    <div class="currency-name">EUR</div>
+                    <div class="currency-value">$1120.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                Este informe incluye únicamente publicaciones de alcance nacional<br>
+                o de impacto significativo para sectores económicos.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

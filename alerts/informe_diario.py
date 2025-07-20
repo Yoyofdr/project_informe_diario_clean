@@ -29,18 +29,10 @@ def generar_informe_html(publicaciones, fecha=None, valores_monedas=None, docume
     <body style='margin:0; padding:0; background:#f6f8fb; font-family: Segoe UI, Arial, sans-serif; color:#1e293b;'>
       <div style='width:100%; background:#f6f8fb;'>
         <div style='background:#fff; width:100%; max-width:100%; margin:0; border-radius:0; box-shadow:none; padding:0;'>
-          <!-- Header ordenado -->
-          <div style="background:linear-gradient(90deg,#2563eb 0%,#6366f1 100%); color:#fff; padding:32px 40px 24px 40px;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-              <div>
-                <div style="font-size:1.5em; font-weight:800; margin-bottom:2px;">Informe Diario</div>
-                <div style="font-size:1em; color:#e0e7ff; margin-bottom:10px;">informes@informediario.cl</div>
-              </div>
-              <div style="font-size:1.1em; color:#e0e7ff; font-weight:600; margin-top:4px;">Hoy, 08:00</div>
-            </div>
-            <div style="font-size:2em; font-weight:900; margin-top:18px; letter-spacing:-1.5px; text-shadow:0 2px 8px #0001;">
-              Resumen del Diario Oficial - {fecha}
-            </div>
+          <!-- Header sobrio -->
+          <div style='padding:32px 0 18px 0; text-align:center;'>
+            <div style="font-size:2.2em; font-weight:900; margin-bottom:8px; letter-spacing:-1.5px; color:#231D54;">Informe Diario Oficial</div>
+            <div style="font-size:1.25em; color:#64748b; font-weight:600;">{fecha}</div>
           </div>
           <!-- Badges -->
           <div style='padding:20px 32px 0 32px;'>
@@ -68,11 +60,21 @@ def generar_informe_html(publicaciones, fecha=None, valores_monedas=None, docume
             else:
                 url_final = f'https://www.diariooficial.interior.gob.cl{url}'
             cat = pub.get('categoria', 'otros')
+            # Extraer entidad y documento del título (asumiendo formato: 'ENTIDAD: Documento...')
+            entidad = ''
+            documento = pub['titulo']
+            if ':' in pub['titulo']:
+                partes = pub['titulo'].split(':', 1)
+                entidad = partes[0].strip()
+                documento = partes[1].strip()
             html += f"""
               <div style='border-left:5px solid {color_categoria(cat)}; padding-left:20px; margin-bottom:22px; background:#f8fafc; border-radius:10px; padding-top:14px; padding-bottom:14px; box-shadow:0 2px 12px #2563eb0a;'>
-                <div style='font-size:1.18em; font-weight:800; margin-bottom:4px; color:#1e293b; letter-spacing:-0.5px;'>{pub['titulo']}</div>
-                <div style='color:#334155; font-size:1.04em; margin-bottom:7px; line-height:1.6;'>{pub['resumen']}</div>
-                <a href='{url_final}' target='_blank' style='color:#2563eb; text-decoration:underline; font-size:1em; font-weight:600;'>Ver documento</a>
+                <div style='font-size:1.08em; font-weight:700; color:#6366f1; margin-bottom:2px;'>{entidad}</div>
+                <div style='font-size:1.18em; font-weight:800; margin-bottom:4px; color:#1e293b; letter-spacing:-0.5px;'>{documento}</div>
+                <div style='color:#334155; font-size:1.04em; margin-bottom:7px; line-height:1.6;'>
+                  <b>Resumen:</b> {pub['resumen']}
+                </div>
+                <a href='{url_final}' target='_blank' style='color:#2563eb; text-decoration:underline; font-size:1em; font-weight:600;'>Ver documento PDF</a>
               </div>
             """
     html += f"""
@@ -96,21 +98,14 @@ def generar_informe_html(publicaciones, fecha=None, valores_monedas=None, docume
         html += "</div>"
     html += f"""
           </div>
-          <!-- Separador -->
-          <div style='height:1px; background:#e5e7eb; margin:18px 32px 0 32px;'></div>
           <!-- Footer -->
           <div style='padding:24px 32px 0 32px;'>
             <div style='display:flex; align-items:center; justify-content:space-between; border-top:1px solid #e5e7eb; padding-top:18px; margin-top:10px;'>
               <div style='color:#64748b; font-size:1.05em; text-align:left; font-weight:500;'>
                 Tiempo de lectura: {tiempo_lectura} minutos
               </div>
-              <a href='{url_informe_completo}' style='background:#2563eb; color:#fff; font-weight:800; border-radius:10px; padding:13px 30px; text-decoration:none; font-size:1.08em; box-shadow:0 2px 12px 0 #2563eb33; border:0; display:inline-block;'>Ver informe completo →</a>
+              <a href='{url_informe_completo}' style='background:#2563eb; color:#fff; font-weight:800; border-radius:10px; padding:13px 30px; text-decoration:none; font-size:1.08em; box-shadow:0 2px 12px 0 #2563eb33; border:0; display:inline-block; margin-left:auto;'>Ver informe completo →</a>
             </div>
-          </div>
-          <!-- Footer legal -->
-          <div style='background:#f6f8fb; color:#64748b; font-size:1em; text-align:center; padding:26px 32px 20px 32px; border-radius:0;'>
-            Para gestionar tus suscripciones, visita <a href='https://informediario.cl/dashboard' style='color:#2563eb; text-decoration:none; font-weight:600;'>tu dashboard</a>.<br>
-            &copy; {datetime.now().year} Informe Diario. Todos los derechos reservados.
           </div>
         </div>
       </div>

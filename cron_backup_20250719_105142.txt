@@ -1,0 +1,1 @@
+0 8 * * * cd /Users/rodrigofernandezdelrio/Desktop/Project\ Diario\ Oficial && /Users/rodrigofernandezdelrio/.pyenv/shims/python3 manage.py informe_diario_oficial >> /Users/rodrigofernandezdelrio/Desktop/Project\ Diario\ Oficial/cron_informe.log 2>&1
