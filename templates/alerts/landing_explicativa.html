@@ -15,7 +15,7 @@
 {% block content %}
 <style>
     body {
-        background: linear-gradient(to bottom right, #f9fafb, #dbeafe, #e0e7ff) !important;
+        background: #fff !important;
         min-height: 100vh;
     }
     .navbar-brand { display: none !important; }
@@ -26,46 +26,18 @@
         overflow: hidden;
         padding: 5rem 0 3rem 0;
     }
-    .modern-hero::before {
-        content: '';
-        position: absolute;
-        top: -10rem;
-        left: -10rem;
-        width: 20rem;
-        height: 20rem;
-        background: radial-gradient(circle, rgba(59,130,246,0.3) 0%, rgba(168,180,255,0.2) 60%, transparent 100%);
-        filter: blur(48px);
-    }
-    .modern-hero::after {
-        content: '';
-        position: absolute;
-        bottom: -10rem;
-        right: -10rem;
-        width: 24rem;
-        height: 24rem;
-        background: radial-gradient(circle, rgba(129,140,248,0.2) 0%, rgba(241,245,249,0.1) 80%, transparent 100%);
-        filter: blur(48px);
-    }
     .hero-card {
-        background: linear-gradient(to bottom right, #000000, #1f2937, #374151);
+        background: white;
         border-radius: 1.5rem;
         padding: 3rem;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    .hero-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to right, rgba(55,65,81,0.3), rgba(0,0,0,0.2));
+        box-shadow: 0 8px 32px 0 rgba(37,99,235,0.07);
+        border: 1px solid #e5e7eb;
     }
     .modern-badge {
-        background: linear-gradient(to right, #dbeafe, #e0e7ff);
-        color: #1e40af;
+        background: #E0E8FF;
+        color: #4A67D6;
         padding: 0.5rem 1.5rem;
         border-radius: 9999px;
         font-size: 0.875rem;
@@ -76,65 +48,66 @@
     .modern-headline {
         font-size: 3rem;
         font-weight: 700;
-        color: #ffffff;
+        color: #212121;
         letter-spacing: -0.025em;
         margin-bottom: 1rem;
     }
     .modern-subtitle {
         font-size: 1.5rem;
-        color: #e5e7eb;
+        color: #424242;
         font-weight: 500;
         margin-bottom: 1rem;
     }
     .modern-highlight {
-        color: #60a5fa;
+        color: #3366FF;
         font-weight: 700;
     }
     .modern-btn-primary {
-        background: linear-gradient(to right, #2563eb, #1d4ed8);
+        background: #3366FF;
         color: white;
         padding: 1rem 2rem;
         border-radius: 0.75rem;
         font-weight: 600;
         font-size: 1.125rem;
-        box-shadow: 0 10px 15px -3px rgba(37,99,235,0.1), 0 4px 6px -2px rgba(37,99,235,0.05);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         transform: translateY(0);
         transition: all 0.3s;
         text-decoration: none;
         display: inline-block;
     }
     .modern-btn-primary:hover {
-        background: linear-gradient(to right, #1d4ed8, #1e40af);
+        background: #2952cc;
         color: white;
-        transform: translateY(-4px);
-        box-shadow: 0 20px 25px -5px rgba(37,99,235,0.1), 0 10px 10px -5px rgba(37,99,235,0.04);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -3px rgba(0,0,0,0.1);
     }
     .modern-btn-secondary {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(8px);
-        color: white;
+        background: white;
+        color: #212121;
         padding: 1rem 2rem;
         border-radius: 0.75rem;
         font-weight: 600;
         font-size: 1.125rem;
-        border: 2px solid rgba(255,255,255,0.2);
+        border: 1px solid #E0E0E0;
         transform: translateY(0);
         transition: all 0.3s;
         text-decoration: none;
         display: inline-block;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     }
     .modern-btn-secondary:hover {
-        background: rgba(255,255,255,0.2);
-        border-color: rgba(255,255,255,0.4);
-        color: white;
-        transform: translateY(-4px);
+        background: #f9fafb;
+        border-color: #E0E0E0;
+        color: #212121;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px -3px rgba(0,0,0,0.1);
     }
     
     /* Benefits Section */
     .benefits-section {
-        background: linear-gradient(to right, #dbeafe, #e0e7ff);
-        border-top: 1px solid #bfdbfe;
-        border-bottom: 1px solid #bfdbfe;
+        background: #fff;
+        border-top: 1px solid #e5e7eb;
+        border-bottom: 1px solid #e5e7eb;
         padding: 5rem 0;
     }
     .benefit-card {
@@ -155,14 +128,14 @@
         left: 0;
         right: 0;
         height: 0.25rem;
-        background: linear-gradient(to right, #3b82f6, #6366f1);
+        background: #3366FF;
         transform: scaleX(0);
         transition: transform 0.3s;
     }
     .benefit-card:hover {
-        border-color: #60a5fa;
-        box-shadow: 0 20px 25px -5px rgba(59,130,246,0.1), 0 10px 10px -5px rgba(59,130,246,0.04);
-        transform: translateY(-8px);
+        border-color: #3366FF;
+        box-shadow: 0 8px 32px 0 rgba(37,99,235,0.07);
+        transform: translateY(-4px);
     }
     .benefit-card:hover::before {
         transform: scaleX(1);
@@ -202,24 +175,15 @@
         overflow: hidden;
     }
     .newsletter-header {
-        background: linear-gradient(to bottom right, #000000, #1f2937, #374151);
+        background: #000000;
         padding: 3rem 2rem;
         text-align: center;
         position: relative;
         overflow: hidden;
     }
-    .newsletter-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to right, rgba(55,65,81,0.3), rgba(0,0,0,0.2));
-    }
     .newsletter-stats {
-        background: linear-gradient(to right, #dbeafe, #e0e7ff);
-        border-bottom: 1px solid #bfdbfe;
+        background: #E0E8FF;
+        border-bottom: 1px solid #E0E0E0;
     }
     .stat-item {
         padding: 1.5rem;
@@ -229,13 +193,13 @@
     .stat-icon {
         width: 1.5rem;
         height: 1.5rem;
-        color: #2563eb;
+        color: #4A67D6;
         margin-bottom: 0.5rem;
     }
     .stat-number {
         font-size: 2rem;
         font-weight: 700;
-        color: #1e40af;
+        color: #4A67D6;
         line-height: 1;
         margin-bottom: 0.25rem;
     }
@@ -244,7 +208,7 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: #2563eb;
+        color: #4A67D6;
     }
     .newsletter-content {
         padding: 2rem;
@@ -259,7 +223,7 @@
     .content-icon-wrapper {
         width: 2.5rem;
         height: 2.5rem;
-        background: linear-gradient(to bottom right, #dbeafe, #e0e7ff);
+        background: #E0E8FF;
         border-radius: 0.5rem;
         display: flex;
         align-items: center;
@@ -287,7 +251,7 @@
     
     /* Modern Footer */
     .modern-footer {
-        background: linear-gradient(to bottom right, #111827, #1f2937, #000000);
+        background: #000000;
         color: white;
         padding: 4rem 0 2rem 0;
         margin-top: 5rem;
@@ -308,7 +272,7 @@
             <span class="modern-badge">✨ Nuevo: Análisis con IA incluido</span>
             <h1 class="modern-headline">Informe Diario</h1>
             <div class="modern-subtitle">El resumen diario del Diario Oficial, <span class="modern-highlight">explicado en simple</span></div>
-            <p class="mb-5" style="color: #e5e7eb; font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
+            <p class="mb-5" style="color: #4b5563; font-size: 1.125rem; max-width: 600px; margin: 0 auto;">
                 Recibe solo lo relevante, directo a tu correo, sin tecnicismos ni ruido. Ahorra tiempo y mantente informado de lo que realmente importa.
             </p>
             <div class="d-flex flex-column flex-md-row justify-content-center align-items-center" style="gap: 1rem; position: relative; z-index: 10;">
@@ -328,7 +292,7 @@
     <div class="row g-4 justify-content-center">
       <div class="col-12 col-md-6 col-lg-3">
         <div class="benefit-card">
-          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #fef3c7, #fde68a);">
+          <div class="benefit-icon-wrapper" style="background: #fef3c7;">
             <svg class="benefit-icon" style="color: #f59e0b;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
@@ -339,7 +303,7 @@
       </div>
       <div class="col-12 col-md-6 col-lg-3">
         <div class="benefit-card">
-          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #d1fae5, #a7f3d0);">
+          <div class="benefit-icon-wrapper" style="background: #d1fae5;">
             <svg class="benefit-icon" style="color: #10b981;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
             </svg>
@@ -350,7 +314,7 @@
       </div>
       <div class="col-12 col-md-6 col-lg-3">
         <div class="benefit-card">
-          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #dbeafe, #bfdbfe);">
+          <div class="benefit-icon-wrapper" style="background: #dbeafe;">
             <svg class="benefit-icon" style="color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
             </svg>
@@ -361,7 +325,7 @@
       </div>
       <div class="col-12 col-md-6 col-lg-3">
         <div class="benefit-card">
-          <div class="benefit-icon-wrapper" style="background: linear-gradient(to bottom right, #ede9fe, #ddd6fe);">
+          <div class="benefit-icon-wrapper" style="background: #ede9fe;">
             <svg class="benefit-icon" style="color: #8b5cf6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
             </svg>
@@ -381,59 +345,128 @@
       <p class="text-muted" style="font-size: 1.25rem;">Información clara, organizada y fácil de entender</p>
     </div>
     <div class="example-wrapper">
-      <div class="newsletter-preview">
-        <!-- Email Header -->
-        <div class="newsletter-header">
-          <h3 class="text-white fw-bold mb-2" style="position: relative; z-index: 1; font-size: 2rem;">Diario Oficial</h3>
-          <p class="text-white mb-0" style="position: relative; z-index: 1; opacity: 0.9;">12 de julio de 2025</p>
-        </div>
+      <!-- Informe Completo del 12 de julio de 2025 -->
+      <div style="max-width: 672px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
         
-        <!-- Stats Bar -->
-        <div class="newsletter-stats">
-          <div class="row g-0">
-            <div class="col-6">
-              <div class="stat-item">
-                <svg class="stat-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <div class="stat-number">13</div>
-                <div class="stat-label">Total documentos</div>
-              </div>
-            </div>
-            <div class="col-6 border-start">
-              <div class="stat-item">
-                <svg class="stat-icon mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="stat-number">2</div>
-                <div class="stat-label">Relevantes</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Content Preview -->
-        <div class="newsletter-content">
-          <div class="content-header">
-            <div class="content-icon-wrapper">
-              <svg style="width: 1.25rem; height: 1.25rem; color: #3b82f6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-              </svg>
-            </div>
-            <h4 class="mb-0 fw-semibold" style="color: #1e293b;">Normas Generales</h4>
+        <!-- Wrapper -->
+        <div style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow: hidden;">
+          
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); padding: 48px 32px; text-align: center;">
+            <h1 style="margin: 0 0 8px 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: -0.025em;">
+              Diario Oficial
+            </h1>
+            <p style="margin: 0; color: #cbd5e1; font-size: 14px; font-weight: 500;">
+              12 de julio de 2025
+            </p>
           </div>
           
-          <div class="publication-item">
-            <h5 class="publication-title">Decreto número 662, de 2024.- Aprueba Reglamento de la ley sobre la economía circular</h5>
-            <p class="publication-summary">El Ministerio del Medio Ambiente aprobó el reglamento que busca fomentar la reutilización de recursos y el cuidado del medio ambiente...</p>
-            <a href="#" class="btn btn-sm btn-primary mt-2" style="background: #3b82f6; border: none;">
-              <svg style="width: 1rem; height: 1rem; margin-right: 0.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              Ver documento oficial
-            </a>
+          <!-- Stats -->
+          <div style="background: linear-gradient(90deg, #eff6ff 0%, #eef2ff 100%); border-bottom: 1px solid #dbeafe;">
+            <div class="row g-0">
+              <div class="col-6 text-center py-4" style="border-right: 1px solid #dbeafe;">
+                <div style="font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 4px; color: #1d4ed8;">
+                  13
+                </div>
+                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #2563eb;">
+                  Total Documentos
+                </div>
+              </div>
+              <div class="col-6 text-center py-4">
+                <div style="font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 4px; color: #059669;">
+                  2
+                </div>
+                <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #059669;">
+                  Relevantes
+                </div>
+              </div>
+            </div>
           </div>
+          
+          <!-- Content -->
+          <div style="padding: 32px;">
+            
+            <!-- NORMAS GENERALES -->
+            <div style="margin-bottom: 40px;">
+              <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid #eff6ff;">
+                <div>
+                  <h2 style="margin: 0 0 2px 0; font-size: 18px; font-weight: 600; color: #1e293b;">
+                    Normas Generales
+                  </h2>
+                  <p style="margin: 0; font-size: 14px; color: #2563eb;">
+                    Normativas de aplicación general
+                  </p>
+                </div>
+                <span style="font-size: 14px; color: #6366f1; font-weight: 500;">
+                  1 elemento
+                </span>
+              </div>
+              
+              <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 16px;">
+                <div style="padding: 24px; border-top: 3px solid #3b82f6; border-radius: 12px 12px 0 0;">
+                  <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #1e293b; line-height: 1.4;">
+                    Decreto número 662, de 2024.- Aprueba Reglamento de la ley sobre la economía circular en la adquisición de bienes y servicios de los Organismos del Estado, aprobada por el artículo segundo de la ley Nº 21.634
+                  </h3>
+                  <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.6;">
+                    El Decreto número 662, emitido por el Ministerio de Hacienda el 3 de junio de 2024, aprueba el reglamento de la ley sobre economía circular en la adquisición de bienes y servicios por organismos del Estado, regulando la transferencia y disposición de bienes muebles en desuso. Este reglamento busca fomentar la reutilización de recursos públicos y el cuidado del medio ambiente, estableciendo plazos y condiciones para la implementación de un sistema de economía circular en la administración pública.
+                  </p>
+                  <a href="https://www.diariooficial.interior.gob.cl/publicaciones/2025/07/12/44197/01/2670892.pdf" class="btn btn-sm btn-primary" style="background: #3b82f6; border: none; padding: 8px 16px; font-size: 14px;">
+                    <svg style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Ver documento oficial
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <!-- AVISOS DESTACADOS -->
+            <div style="margin-bottom: 40px;">
+              <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid #eff6ff;">
+                <div>
+                  <h2 style="margin: 0 0 2px 0; font-size: 18px; font-weight: 600; color: #1e293b;">
+                    Avisos Destacados
+                  </h2>
+                  <p style="margin: 0; font-size: 14px; color: #2563eb;">
+                    Avisos de interés público y licitaciones
+                  </p>
+                </div>
+                <span style="font-size: 14px; color: #6366f1; font-weight: 500;">
+                  1 elemento
+                </span>
+              </div>
+              
+              <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 16px;">
+                <div style="padding: 24px; border-top: 3px solid #3b82f6; border-radius: 12px 12px 0 0;">
+                  <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #1e293b; line-height: 1.4;">
+                    Llamado a Licitación Pública para la Concesión del Uso de las Vías
+                    <span style="display: inline-block; padding: 4px 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; margin-left: 8px; background-color: #dbeafe; color: #1e40af;">Licitación</span>
+                  </h3>
+                  <p style="margin: 0 0 16px 0; font-size: 14px; color: #64748b; line-height: 1.6;">
+                    El Ministerio de Transportes y Telecomunicaciones convoca a una licitación pública para la concesión del uso de las vías de los servicios urbanos de transporte público mediante buses, con bases disponibles por 10 días hábiles desde su publicación. Las ofertas deberán presentarse en un acto público, cuya fecha se comunicará con al menos 20 días de anticipación, y el costo de las bases es de $300.000.
+                  </p>
+                  <a href="http://www.diariooficial.interior.gob.cl/publicaciones/2025/07/12/44197/04/2672097.pdf" class="btn btn-sm btn-primary" style="background: #3b82f6; border: none; padding: 8px 16px; font-size: 14px;">
+                    <svg style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Ver documento oficial
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+          <!-- Footer -->
+          <div style="background-color: #f8fafc; padding: 24px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+            <p style="margin: 0; font-size: 13px; color: #64748b; line-height: 1.5;">
+              Información obtenida directamente del sitio diariooficial.interior.gob.cl
+            </p>
+          </div>
+          
         </div>
+        <!-- End Wrapper -->
+        
       </div>
       
       <p class="text-center text-muted mt-4">

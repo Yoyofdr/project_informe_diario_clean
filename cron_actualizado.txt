@@ -1,0 +1,1 @@
+0 9 * * * cd /Users/rodrigofernandezdelrio/Desktop/Project\ Diario\ Oficial && /Users/rodrigofernandezdelrio/.pyenv/shims/python3 enviar_informe_diario.py >> /Users/rodrigofernandezdelrio/Desktop/Project\ Diario\ Oficial/informe_diario.log 2>&1

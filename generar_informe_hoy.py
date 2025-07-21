@@ -26,34 +26,52 @@ def generar_informe_html(fecha):
     valores_monedas = resultado.get('valores_monedas', {})
     total_documentos = resultado.get('total_documentos', 0)
     
-    # Si no hay publicaciones, crear algunas de ejemplo
+    # Si no hay publicaciones, generar informe de error
     if not publicaciones:
-        print("No se encontraron publicaciones. Generando informe de ejemplo...")
-        publicaciones = [
-            {
-                "seccion": "NORMAS GENERALES",
-                "titulo": "LEY NÚM. 21.789 - MODIFICA EL CÓDIGO DEL TRABAJO EN MATERIA DE TELETRABAJO",
-                "url_pdf": "#",
-                "relevante": True,
-                "resumen": "Se establecen nuevas regulaciones para el trabajo a distancia, incluyendo derechos de desconexión digital y obligaciones del empleador respecto a equipamiento y gastos."
-            },
-            {
-                "seccion": "NORMAS GENERALES", 
-                "titulo": "DECRETO SUPREMO Nº 145 - MINISTERIO DE HACIENDA - FIJA VALOR DE LA UNIDAD DE FOMENTO",
-                "url_pdf": "#",
-                "relevante": True,
-                "resumen": "Se actualiza el valor de la UF para el período correspondiente, considerando la variación del IPC del mes anterior."
-            },
-            {
-                "seccion": "NORMAS PARTICULARES",
-                "titulo": "RESOLUCIÓN EXENTA Nº 892 - SUBSECRETARÍA DE TRANSPORTES",
-                "url_pdf": "#", 
-                "relevante": False,
-                "resumen": "Se establecen nuevas rutas y frecuencias para el transporte público en la Región Metropolitana."
-            }
-        ]
-        valores_monedas = {"dolar": "925.50", "euro": "1012.30"}
-        total_documentos = 45
+        print("ERROR: No se encontraron publicaciones para esta fecha.")
+        
+        # Generar HTML de error
+        html_error = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Diario Oficial {fecha}</title>
+    <style>
+        body {{ font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }}
+        .error-container {{ max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }}
+        h1 {{ color: #d32f2f; }}
+        .info {{ background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 4px; margin: 20px 0; }}
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>No se encontraron publicaciones</h1>
+        <p>No se pudieron obtener publicaciones del Diario Oficial para la fecha {fecha}.</p>
+        <div class="info">
+            <strong>Posibles razones:</strong>
+            <ul>
+                <li>No hay publicaciones para esta fecha (fin de semana o feriado)</li>
+                <li>Las publicaciones aún no han sido cargadas</li>
+                <li>Error al acceder al sitio del Diario Oficial</li>
+            </ul>
+        </div>
+        <p><strong>Sugerencias:</strong></p>
+        <ul>
+            <li>Intente más tarde</li>
+            <li>Verifique si la fecha corresponde a un día hábil</li>
+            <li>Revise directamente en <a href="https://www.diariooficial.interior.gob.cl">diariooficial.interior.gob.cl</a></li>
+        </ul>
+    </div>
+</body>
+</html>
+"""
+        filename = f"error_diario_oficial_{fecha.replace('-', '_')}.html"
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(html_error)
+        
+        print(f"Archivo de error generado: {filename}")
+        return html_error
     
     # Generar HTML
     html = f"""

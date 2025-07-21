@@ -88,6 +88,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   5. Define estrategias nacionales de desarrollo
   6. Abre procesos de consulta ciudadana nacional
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
+  8. Actualiza o establece programas de regulación ambiental o normas de emisión
+  9. Define nuevos estándares ambientales o modifica los existentes
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -178,6 +180,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   5. Define estrategias nacionales de desarrollo
   6. Abre procesos de consulta ciudadana nacional
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
+  8. Actualiza o establece programas de regulación ambiental o normas de emisión
+  9. Define nuevos estándares ambientales o modifica los existentes
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -262,6 +266,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   5. Define estrategias nacionales de desarrollo
   6. Abre procesos de consulta ciudadana nacional
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
+  8. Actualiza o establece programas de regulación ambiental o normas de emisión
+  9. Define nuevos estándares ambientales o modifica los existentes
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -345,6 +351,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   5. Define estrategias nacionales de desarrollo
   6. Abre procesos de consulta ciudadana nacional
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
+  8. Actualiza o establece programas de regulación ambiental o normas de emisión
+  9. Define nuevos estándares ambientales o modifica los existentes
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -475,7 +483,13 @@ RAZÓN: [Explicación en una línea]"""
             
             # Tipos de cambio (siempre relevante)
             (["TIPOS DE CAMBIO", "PARIDADES DE MONEDAS"], 
-             "Información cambiaria")
+             "Información cambiaria"),
+            
+            # Regulaciones ambientales y programas de regulación
+            (["PROGRAMA DE REGULACIÓN AMBIENTAL", "NORMAS DE EMISIÓN", "NORMAS DE CALIDAD AMBIENTAL",
+              "PLANES DE DESCONTAMINACIÓN", "EVALUACIÓN AMBIENTAL", "IMPACTO AMBIENTAL",
+              "ESTÁNDARES AMBIENTALES", "REGULACIÓN AMBIENTAL"], 
+             "Regulación o programa ambiental")
         ]
         
         # Evaluar cada criterio
