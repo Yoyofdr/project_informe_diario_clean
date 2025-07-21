@@ -1,121 +1,187 @@
-# Informe Diario – Backend robusto y escalable
+# 📰 Informe Diario - Resumen del Diario Oficial
 
-## Descripción
-Plataforma Django para el procesamiento, análisis y entrega de información relevante del Diario Oficial y Hechos Esenciales, con enfoque en robustez, eficiencia y escalabilidad.
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-blue?style=flat-square&logo=github)](https://yoyofdr.github.io/informediario/)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)](https://python.org)
+[![Django](https://img.shields.io/badge/Django-5.2+-green?style=flat-square&logo=django)](https://djangoproject.com)
 
----
+> El resumen diario del Diario Oficial de Chile, explicado en simple y directo a tu correo.
 
-## Servicios y utilidades integradas
+## 🚀 Demo en Vivo
 
-### 1. **Sistema de Caché (Redis/Django cache)**
-- **Ubicación:** `alerts/services/cache_service.py`
-- **Uso:** Cachea PDFs, resultados de scraping y respuestas de API para evitar descargas y procesamiento repetido.
-- **Ejemplo:**
-```python
-from alerts.services.cache_service import cache_service
-pdf_bytes = cache_service.get_pdf_content(url_pdf)
+**Visita la demo:** [https://yoyofdr.github.io/informediario/](https://yoyofdr.github.io/informediario/)
+
+## 📋 ¿Qué es Informe Diario?
+
+Informe Diario es un servicio que:
+
+- 📖 **Lee el Diario Oficial** automáticamente cada día
+- 🧠 **Analiza con IA** las publicaciones más relevantes
+- 📧 **Envía un resumen** directo a tu correo
+- ⏰ **Ahorra tiempo** - solo lees lo importante en 5 minutos
+- 🎯 **Filtra contenido** - solo lo que realmente te afecta
+
+## ✨ Características
+
+- **Análisis Inteligente**: Usa IA para identificar publicaciones relevantes
+- **Resúmenes Claros**: Explicado en lenguaje simple, sin tecnicismos
+- **Entrega Diaria**: Recibe el informe cada mañana en tu correo
+- **Categorización**: Organizado por secciones (Normas Generales, Avisos, etc.)
+- **Enlaces Directos**: Acceso directo a los documentos oficiales
+
+## 🛠️ Tecnologías
+
+- **Backend**: Django 5.2, Python 3.8+
+- **Frontend**: Bootstrap 5, HTML5, CSS3
+- **IA**: OpenAI GPT para análisis de relevancia
+- **Base de Datos**: SQLite (desarrollo) / PostgreSQL (producción)
+- **Despliegue**: GitHub Pages (demo) / VPS (producción)
+
+## 📁 Estructura del Proyecto
+
+```
+informediario/
+├── alerts/                 # App principal de Django
+│   ├── models.py          # Modelos de datos
+│   ├── views.py           # Vistas y lógica de negocio
+│   ├── services/          # Servicios (scraping, IA, email)
+│   └── templates/         # Templates HTML
+├── market_sniper/         # Configuración de Django
+├── templates/             # Templates globales
+├── static/               # Archivos estáticos
+├── manage.py             # Comando de Django
+└── index.html            # Demo para GitHub Pages
 ```
 
-### 2. **Extractor de PDFs robusto**
-- **Ubicación:** `alerts/services/pdf_extractor.py`
-- **Uso:** Extrae texto de PDFs usando PyPDF2, PDFMiner y OCR con fallback automático.
-- **Ejemplo:**
-```python
-from alerts.services.pdf_extractor import PDFExtractor
-extractor = PDFExtractor()
-texto, metodo = extractor.extract_text(pdf_bytes)
-```
+## 🚀 Instalación Local
 
-### 3. **Reintentos automáticos (retry)**
-- **Ubicación:** `alerts/utils/retry_utils.py`
-- **Uso:** Decorador para funciones críticas que pueden fallar (descarga de PDFs, requests externos).
-- **Ejemplo:**
-```python
-from alerts.utils.retry_utils import retry
-@retry(max_attempts=3, backoff_base=2)
-def funcion_critica(): ...
-```
+### Prerrequisitos
 
-### 4. **Rate Limiting inteligente**
-- **Ubicación:** `alerts/utils/rate_limiter.py`
-- **Uso:** Limita la cantidad de requests por dominio para evitar bloqueos.
-- **Ejemplo:**
-```python
-from alerts.utils.rate_limiter import rate_limited
-@rate_limited
-def funcion_con_request(url): ...
-```
+- Python 3.8 o superior
+- pip (gestor de paquetes de Python)
 
-### 5. **Optimización de queries Django**
-- **Ubicación:** `alerts/utils/db_optimizations.py`
-- **Uso:** Utilidades y helpers para aplicar `select_related`, `prefetch_related` y anotaciones en queries complejas.
-- **Ejemplo:**
-```python
-from alerts.utils.db_optimizations import optimize_empresa_queries
-empresas = optimize_empresa_queries(Empresa.objects.all())
-```
+### Pasos
 
----
+1. **Clona el repositorio**
+   ```bash
+   git clone https://github.com/Yoyofdr/informediario.git
+   cd informediario
+   ```
 
-## Buenas prácticas
-- Siempre usar los servicios de caché y extractor robusto en scraping y análisis de PDFs.
-- Decorar funciones de requests externos con `@retry` y `@rate_limited`.
-- Optimizar queries en vistas y comandos usando los helpers de `db_optimizations`.
-- Mantener los tests actualizados (`alerts/tests/`).
+2. **Crea un entorno virtual**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # En Windows: venv\Scripts\activate
+   ```
 
----
-
-## Configuración y despliegue rápido
-1. **Instalar dependencias:**
+3. **Instala las dependencias**
    ```bash
    pip install -r requirements.txt
    ```
-2. **Configurar Redis** (opcional pero recomendado para caché eficiente).
-3. **Variables de entorno:**
-   - `GEMINI_API_KEY` y `HF_API_TOKEN` para IA.
-4. **Migrar la base de datos:**
+
+4. **Configura las variables de entorno**
+   ```bash
+   cp .env.example .env
+   # Edita .env con tus credenciales
+   ```
+
+5. **Ejecuta las migraciones**
    ```bash
    python manage.py migrate
    ```
-5. **Correr los tests:**
-   ```bash
-   python manage.py test alerts.tests
-   ```
-6. **Ejecutar el servidor:**
+
+6. **Inicia el servidor**
    ```bash
    python manage.py runserver
    ```
 
----
+7. **Visita** http://localhost:8000
 
-## Contacto y soporte
-Para dudas técnicas, contacta al equipo de desarrollo.
+## 📧 Configuración de Email
 
----
+El proyecto soporta dos modos de envío de emails:
 
-## Monitoreo y métricas
-
-### Servicio interno de métricas
-- **Ubicación:** `alerts/services/metrics_service.py`
-- **Uso:** Permite trackear duración, éxito, errores y detalles de scraping, descargas de PDF y llamadas a APIs.
-- **Ejemplo básico:**
-```python
-from alerts.services.metrics_service import metrics_collector
-from datetime import datetime
-
-# Iniciar sesión de scraping
-metric = metrics_collector.start_scraping(datetime.now())
-
-# Trackear procesamiento de un PDF
-with metrics_collector.track_pdf_processing(url_pdf, titulo) as pdf_metric:
-    # ... procesamiento ...
-    metrics_collector.record_pdf_extraction(pdf_metric, metodo, tiempo)
-
-# Finalizar sesión
-metrics_collector.end_scraping(exitoso=True)
+### Modo Desarrollo (Archivos)
+```bash
+EMAIL_MODE=filebased
 ```
-- Los datos quedan en la base de datos y pueden consultarse vía Django Admin o scripts.
+Los emails se guardan en la carpeta `sent_emails/`
 
-### Sugerencias de integración externa
-- Puedes conectar con Sentry, Prometheus, Grafana, etc. usando señales de Django o hooks en los métodos del servicio.
-- Para alertas en tiempo real, puedes agregar notificaciones en los métodos `end_scraping` o `track_api_call`. 
+### Modo Producción (SMTP)
+```bash
+EMAIL_MODE=smtp
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=tu@email.com
+EMAIL_HOST_PASSWORD=tu_contraseña
+```
+
+## 🤖 Configuración de IA
+
+Para usar el análisis con IA, configura tu API key de OpenAI:
+
+```bash
+OPENAI_API_KEY=tu_api_key_aqui
+```
+
+## 📊 Comandos Útiles
+
+### Generar informe manual
+```bash
+python manage.py informe_diario_oficial
+```
+
+### Importar empresas
+```bash
+python manage.py importar_empresas
+```
+
+### Clasificar empresas
+```bash
+python manage.py clasificar_empresas
+```
+
+## 🌐 Despliegue
+
+### GitHub Pages (Demo)
+El sitio demo está desplegado automáticamente en GitHub Pages desde la rama `main`.
+
+### Producción
+Para desplegar en producción:
+
+1. Configura un servidor VPS
+2. Instala nginx y gunicorn
+3. Configura SSL con Let's Encrypt
+4. Usa PostgreSQL como base de datos
+5. Configura un cron job para el informe diario
+
+## 📈 Roadmap
+
+- [ ] App móvil nativa
+- [ ] Notificaciones push
+- [ ] Personalización de filtros
+- [ ] API pública
+- [ ] Integración con WhatsApp
+- [ ] Dashboard de analytics
+
+## 🤝 Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+
+## 📞 Contacto
+
+- **Sitio web**: [informediario.cl](https://informediario.cl)
+- **Email**: rodrigo@carvuk.com
+- **GitHub**: [@Yoyofdr](https://github.com/Yoyofdr)
+
+---
+
+⭐ **Si te gusta este proyecto, ¡dale una estrella en GitHub!** 

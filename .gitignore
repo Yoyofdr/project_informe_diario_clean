@@ -1,15 +1,9 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
-env/
-venv/
 build/
 develop-eggs/
 dist/
@@ -21,54 +15,161 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Django stuff:
+# Django
 *.log
-*.pot
-*.pyc
-*.pyo
-*.db
-*.sqlite3
-*.sqlite
-
-# Media/static files
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
 media/
-staticfiles/
 
-# Django local settings
-.env
-.env.*
-*.local
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
 
-# VSCode
+# IDE
 .vscode/
-
-# MacOS
-.DS_Store
-
-# PyCharm
 .idea/
-
-# System files
-Thumbs.db
-
-# Test coverage
-htmlcov/
-.coverage
-.tox/
-.nox/
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Backup files
-*~
-*.bak
 *.swp
 *.swo
+*~
 
-# Ignore secret keys
-secret_*.json 
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Sent emails (development)
+sent_emails/
+
+# Static files (will be collected)
+staticfiles/
+
+# Database
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Cache
+.cache/
+.pytest_cache/
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Django migrations (keep only the latest)
+alerts/migrations/0*.py
+!alerts/migrations/__init__.py
+
+# Backup files
+*.bak
+*.backup
+
+# Test files
+test_*.py
+*_test.py
+
+# Debug files
+debug_*.html
+debug_*.py
+
+# Generated reports
+informe_*.html
+informe_*.py
+
+# Screenshots and images (keep only essential ones)
+*.png
+*.jpg
+*.jpeg
+*.gif
+!hero_texto_corregido.png
+!landing_*.png
+!informe_completo_seccion.png
+
+# HTML files (keep only the main index.html)
+*.html
+!index.html
+!templates/
+!templates/alerts/
+!templates/alerts/base.html
+!templates/alerts/landing_explicativa.html
+!templates/informe_diario_oficial_plantilla.html
+
+# Python scripts (keep only essential ones)
+*.py
+!manage.py
+!alerts/
+!market_sniper/
+!requirements.txt
+!README.md
+!CLAUDE.md
+!DISEÑO_INFORME_OFICIAL.md
+!POLITICA_CONTENIDO.md 
