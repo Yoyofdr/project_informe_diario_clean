@@ -27,6 +27,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
+staticfiles/
 
 # Virtual Environment
 venv/
@@ -60,13 +61,6 @@ Thumbs.db
 
 # Sent emails (development)
 sent_emails/
-
-# Static files (will be collected)
-staticfiles/
-
-# Database
-*.db
-*.sqlite3
 
 # Logs
 *.log
@@ -141,9 +135,9 @@ test_*.py
 debug_*.html
 debug_*.py
 
-# Generated reports
-informe_*.html
-informe_*.py
+# Generated reports (exclude old ones)
+informe_*_*.html
+informe_*_*.py
 
 # Screenshots and images (keep only essential ones)
 *.png
@@ -154,22 +148,12 @@ informe_*.py
 !landing_*.png
 !informe_completo_seccion.png
 
-# HTML files (keep only the main index.html)
-*.html
+# Keep essential files for GitHub Pages
 !index.html
-!templates/
-!templates/alerts/
-!templates/alerts/base.html
-!templates/alerts/landing_explicativa.html
-!templates/informe_diario_oficial_plantilla.html
-
-# Python scripts (keep only essential ones)
-*.py
-!manage.py
-!alerts/
-!market_sniper/
-!requirements.txt
 !README.md
 !CLAUDE.md
 !DISEÑO_INFORME_OFICIAL.md
-!POLITICA_CONTENIDO.md 
+!POLITICA_CONTENIDO.md
+!.github/
+!.github/workflows/
+!.github/workflows/deploy.yml 
