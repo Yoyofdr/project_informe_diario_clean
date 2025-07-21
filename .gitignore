@@ -21,14 +21,6 @@ wheels/
 *.egg
 MANIFEST
 
-# Django
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-media/
-staticfiles/
-
 # Virtual Environment
 venv/
 env/
@@ -58,9 +50,6 @@ Thumbs.db
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Sent emails (development)
-sent_emails/
 
 # Logs
 *.log
@@ -119,41 +108,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Django migrations (keep only the latest)
-alerts/migrations/0*.py
-!alerts/migrations/__init__.py
-
 # Backup files
 *.bak
-*.backup
-
-# Test files
-test_*.py
-*_test.py
-
-# Debug files
-debug_*.html
-debug_*.py
-
-# Generated reports (exclude old ones)
-informe_*_*.html
-informe_*_*.py
-
-# Screenshots and images (keep only essential ones)
-*.png
-*.jpg
-*.jpeg
-*.gif
-!hero_texto_corregido.png
-!landing_*.png
-!informe_completo_seccion.png
-
-# Keep essential files for GitHub Pages
-!index.html
-!README.md
-!CLAUDE.md
-!DISEÑO_INFORME_OFICIAL.md
-!POLITICA_CONTENIDO.md
-!.github/
-!.github/workflows/
-!.github/workflows/deploy.yml 
+*.backup 
