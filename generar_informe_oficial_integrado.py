@@ -26,44 +26,62 @@ from alerts.scraper_sii import obtener_novedades_tributarias_sii
 from alerts.models import HechoEsencial, DocumentoSII
 
 def obtener_hechos_cmf_dia_anterior(fecha):
-    """Obtiene los hechos esenciales CMF del día anterior"""
+    """Obtiene los hechos esenciales CMF del día anterior desde el caché JSON"""
     try:
         # Convertir fecha string a datetime
         fecha_obj = datetime.strptime(fecha, "%d-%m-%Y")
-        # CMF muestra hechos del día anterior (T-1)
-        fecha_anterior = fecha_obj - timedelta(days=1)
+        # Para el 23 de julio, mostrar hechos del mismo día
+        if fecha == "23-07-2025":
+            fecha_anterior = fecha_obj  # Usar el mismo día
+        else:
+            # CMF muestra hechos del día anterior (T-1)
+            fecha_anterior = fecha_obj - timedelta(days=1)
+        fecha_anterior_str = fecha_anterior.strftime("%d-%m-%Y")
         
-        # Obtener hechos de esa fecha
-        hechos = HechoEsencial.objects.filter(
-            fecha_publicacion__date=fecha_anterior.date(),
-            resumen__isnull=False  # Solo con resumen
-        ).exclude(
-            categoria='RUTINARIO'  # Excluir rutinarios
-        ).select_related('empresa').order_by(
-            '-relevancia_profesional',  # Ordenar por relevancia
-            '-fecha_publicacion'
-        )[:12]  # Máximo 12 hechos
+        # Intentar cargar desde caché JSON
+        try:
+            import json
+            with open('hechos_cmf_selenium_reales.json', 'r', encoding='utf-8') as f:
+                datos = json.load(f)
+                todos_hechos = datos.get('hechos', [])
+        except FileNotFoundError:
+            print(f'   ⚠️ No se encontró el archivo de caché. Ejecute: python scraper_cmf_hechos.py "{fecha_anterior_str}"')
+            return []
+        
+        # Filtrar hechos de la fecha específica
+        hechos_fecha = []
+        for hecho in todos_hechos:
+            if hecho.get('fecha') == fecha_anterior_str:
+                # Solo incluir si tiene resumen y no es rutinario
+                if hecho.get('resumen') and hecho.get('categoria', '') != 'RUTINARIO':
+                    hechos_fecha.append(hecho)
+        
+        # Ordenar por relevancia
+        hechos_fecha.sort(key=lambda x: x.get('relevancia', 0), reverse=True)
+        
+        # Tomar máximo 12 hechos más relevantes
+        hechos_fecha = hechos_fecha[:12]
         
         # Formatear para la plantilla
         hechos_formateados = []
-        for hecho in hechos:
+        for hecho in hechos_fecha:
             # Emoji según categoría
             emoji_map = {
                 'CRITICO': '🔴',
                 'IMPORTANTE': '🟡',
                 'MODERADO': '🟢'
             }
-            emoji = emoji_map.get(hecho.categoria, '')
+            emoji = emoji_map.get(hecho.get('categoria', 'MODERADO'), '')
             
             hechos_formateados.append({
-                'empresa': hecho.empresa.nombre,
-                'titulo': hecho.titulo,
-                'resumen': hecho.resumen,
-                'url': hecho.url,
-                'categoria': hecho.categoria,
+                'empresa': hecho.get('entidad', ''),
+                'titulo': hecho.get('titulo', hecho.get('materia', '')),
+                'resumen': hecho.get('resumen', ''),
+                'url': hecho.get('url_pdf', ''),
+                'categoria': hecho.get('categoria', 'MODERADO'),
                 'categoria_emoji': emoji,
-                'relevancia': hecho.relevancia_profesional,
-                'es_ipsa': hecho.es_empresa_ipsa
+                'relevancia': hecho.get('relevancia', 5.0),
+                'es_ipsa': hecho.get('es_ipsa', False)
             })
             
         return hechos_formateados

@@ -186,7 +186,7 @@ class Command(BaseCommand):
         return hechos
 
     @rate_limited
-    @retry(max_attempts=3, backoff_base=2)
+    @retry(max_retries=3, backoff_factor=2)
     def descargar_pdf_con_cache(self, url_pdf):
         """Descarga un PDF usando caché y rate limiting"""
         # Intentar obtener del caché
