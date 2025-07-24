@@ -26,6 +26,7 @@ from alerts.utils.rate_limiter import rate_limited
 from alerts.utils.retry_utils import retry
 from django.core.mail import send_mail
 from alerts.evaluador_relevancia import EvaluadorRelevancia
+from alerts.utils.sii_utils import es_contenido_sii
 
 BASE_URL = "https://www.diariooficial.interior.gob.cl/edicionelectronica/index.php"
 
@@ -639,7 +640,8 @@ def obtener_sumario_diario_oficial(fecha=None, force_refresh=False):
                             "relevante": es_relevante,
                             "es_licitacion": es_lic,
                             "razon_relevancia": razon,
-                            "resumen": ""
+                            "resumen": "",
+                            "es_sii": es_contenido_sii(titulo)
                         })
         
         # Procesar certificado de monedas
@@ -696,7 +698,8 @@ def obtener_sumario_diario_oficial(fecha=None, force_refresh=False):
                                     "relevante": es_relevante,
                                     "es_licitacion": es_lic,
                                     "razon_relevancia": razon,
-                                    "resumen": ""
+                                    "resumen": "",
+                                    "es_sii": es_contenido_sii(titulo)
                                 })
                 
                 print(f"[INFO] Se encontraron {normas_part_encontradas} normas particulares")
@@ -754,7 +757,8 @@ def obtener_sumario_diario_oficial(fecha=None, force_refresh=False):
                                             "relevante": es_relevante,
                                             "es_licitacion": es_lic,
                                             "razon_relevancia": razon,
-                                            "resumen": ""
+                                            "resumen": "",
+                                            "es_sii": es_contenido_sii(titulo)
                                         })
                                         
                                         if es_lic:

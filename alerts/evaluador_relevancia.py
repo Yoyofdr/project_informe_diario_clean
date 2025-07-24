@@ -90,6 +90,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
   8. Actualiza o establece programas de regulación ambiental o normas de emisión
   9. Define nuevos estándares ambientales o modifica los existentes
+  10. Es emitido por el SII (Servicio de Impuestos Internos) - SIEMPRE relevante
+  11. Es emitido por la CMF y afecta empresas IPSA o mercados regulados
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -182,6 +184,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
   8. Actualiza o establece programas de regulación ambiental o normas de emisión
   9. Define nuevos estándares ambientales o modifica los existentes
+  10. Es emitido por el SII (Servicio de Impuestos Internos) - SIEMPRE relevante
+  11. Es emitido por la CMF y afecta empresas IPSA o mercados regulados
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -268,6 +272,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
   8. Actualiza o establece programas de regulación ambiental o normas de emisión
   9. Define nuevos estándares ambientales o modifica los existentes
+  10. Es emitido por el SII (Servicio de Impuestos Internos) - SIEMPRE relevante
+  11. Es emitido por la CMF y afecta empresas IPSA o mercados regulados
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -353,6 +359,8 @@ Una publicación es RELEVANTE si cumple TODOS estos criterios:
   7. Convoca a licitaciones públicas de gran envergadura (>1000 UF)
   8. Actualiza o establece programas de regulación ambiental o normas de emisión
   9. Define nuevos estándares ambientales o modifica los existentes
+  10. Es emitido por el SII (Servicio de Impuestos Internos) - SIEMPRE relevante
+  11. Es emitido por la CMF y afecta empresas IPSA o mercados regulados
 
 Una publicación NO es relevante si:
 1. Es un nombramiento o designación individual
@@ -489,7 +497,25 @@ RAZÓN: [Explicación en una línea]"""
             (["PROGRAMA DE REGULACIÓN AMBIENTAL", "NORMAS DE EMISIÓN", "NORMAS DE CALIDAD AMBIENTAL",
               "PLANES DE DESCONTAMINACIÓN", "EVALUACIÓN AMBIENTAL", "IMPACTO AMBIENTAL",
               "ESTÁNDARES AMBIENTALES", "REGULACIÓN AMBIENTAL"], 
-             "Regulación o programa ambiental")
+             "Regulación o programa ambiental"),
+            
+            # SII - Servicio de Impuestos Internos (SIEMPRE relevante)
+            (["SERVICIO DE IMPUESTOS INTERNOS", "SII", "DIRECTOR NACIONAL DEL SERVICIO DE IMPUESTOS",
+              "CIRCULAR SII", "RESOLUCIÓN SII", "OFICIO SII", "TRIBUTARIO", "TRIBUTARIA",
+              "CÓDIGO TRIBUTARIO", "IMPUESTO A LA RENTA", "IVA", "FACTURA ELECTRÓNICA",
+              "DOCUMENTOS TRIBUTARIOS", "FISCALIZACIÓN TRIBUTARIA", "CONTRIBUYENTES",
+              "DECLARACIÓN DE IMPUESTOS", "DEVOLUCIÓN DE IMPUESTOS", "CONDONACIÓN",
+              "NORMAS TRIBUTARIAS", "INTERPRETACIÓN TRIBUTARIA"], 
+             "Normativa tributaria del SII"),
+            
+            # CMF - Comisión para el Mercado Financiero (empresas importantes)
+            (["COMISIÓN PARA EL MERCADO FINANCIERO", "CMF", "SUPERINTENDENCIA DE VALORES",
+              "SUPERINTENDENCIA DE BANCOS", "SUPERINTENDENCIA DE PENSIONES", "AFP",
+              "BOLSA DE COMERCIO", "BOLSA DE VALORES", "OFERTA PÚBLICA", "EMISIÓN DE BONOS",
+              "VALORES DE OFERTA PÚBLICA", "SOCIEDADES ANÓNIMAS ABIERTAS", "IPSA",
+              "MERCADO DE VALORES", "MERCADO FINANCIERO", "INSTITUCIONES FINANCIERAS",
+              "COMPAÑÍAS DE SEGUROS", "ADMINISTRADORAS DE FONDOS"], 
+             "Regulación del mercado financiero (CMF)")
         ]
         
         # Evaluar cada criterio
