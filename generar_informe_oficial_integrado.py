@@ -135,7 +135,7 @@ def generar_informe_integrado(fecha=None, no_enviar=False):
     try:
         resultado_sii = obtener_novedades_tributarias_sii(fecha)
         circulares_sii = resultado_sii.get('circulares', [])
-        resoluciones_sii = resultado_sii.get('resoluciones', [])
+        resoluciones_sii = resultado_sii.get('resoluciones_exentas', [])  # La clave correcta
         print(f"   ✓ {len(circulares_sii)} circulares, {len(resoluciones_sii)} resoluciones")
     except Exception as e:
         print(f"   ✗ Error obteniendo datos SII: {str(e)}")
