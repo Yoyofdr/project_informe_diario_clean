@@ -436,7 +436,8 @@ def obtener_novedades_tributarias_sii(fecha_referencia=None, dias_atras=7):
     para una fecha específica o los últimos días especificados
     
     Args:
-        fecha_referencia (datetime): Fecha específica para filtrar (busca día anterior)
+        fecha_referencia (str or datetime): Fecha específica para filtrar documentos recientes
+                                           Si es string, debe estar en formato 'DD-MM-YYYY'
         dias_atras (int): Número de días hacia atrás para considerar como "reciente"
     
     Returns:
@@ -453,11 +454,9 @@ def obtener_novedades_tributarias_sii(fecha_referencia=None, dias_atras=7):
     try:
         year = datetime.now().year
         
-        if fecha_referencia:
-            dia_anterior = fecha_referencia - timedelta(days=1)
-            print(f"[SII] Obteniendo novedades tributarias del {dia_anterior.strftime('%d-%m-%Y')}...")
-        else:
-            print(f"[SII] Obteniendo novedades tributarias de los últimos {dias_atras} días...")
+        # Convertir string a datetime si es necesario
+        if fecha_referencia and isinstance(fecha_referencia, str):
+            fecha_referencia = datetime.strptime(fecha_referencia, "%d-%m-%Y")
         
         # Obtener circulares
         circulares = obtener_circulares_sii(year)
@@ -468,33 +467,50 @@ def obtener_novedades_tributarias_sii(fecha_referencia=None, dias_atras=7):
         # Obtener jurisprudencia administrativa
         jurisprudencia = obtener_jurisprudencia_administrativa_sii(year)
         
+        # Función auxiliar para verificar si un documento es reciente
+        def es_documento_reciente(fecha_str, fecha_ref, dias):
+            """Verifica si un documento es de los últimos 'dias' días"""
+            fecha_doc = convertir_fecha_sii_a_datetime(fecha_str)
+            if not fecha_doc:
+                return False
+            
+            fecha_limite = fecha_ref - timedelta(days=dias)
+            return fecha_doc >= fecha_limite and fecha_doc <= fecha_ref
+        
         # Filtrar según criterio de fecha
         if fecha_referencia:
-            # Filtrar por fecha específica (día anterior)
+            print(f"[SII] Obteniendo novedades tributarias recientes hasta el {fecha_referencia.strftime('%d-%m-%Y')}...")
+            
+            # Filtrar documentos de los últimos días
             circulares_recientes = []
             for circular in circulares:
-                if es_fecha_del_dia_anterior(circular['fecha'], fecha_referencia):
+                if circular.get('fecha') and es_documento_reciente(circular['fecha'], fecha_referencia, dias_atras):
                     circulares_recientes.append(circular)
             
             resoluciones_recientes = []
             for resolucion in resoluciones:
-                if es_fecha_del_dia_anterior(resolucion['fecha'], fecha_referencia):
+                if resolucion.get('fecha') and es_documento_reciente(resolucion['fecha'], fecha_referencia, dias_atras):
                     resoluciones_recientes.append(resolucion)
             
             jurisprudencia_reciente = []
             for juris in jurisprudencia:
-                if es_fecha_del_dia_anterior(juris['fecha'], fecha_referencia):
+                if juris.get('fecha') and es_documento_reciente(juris['fecha'], fecha_referencia, dias_atras):
                     jurisprudencia_reciente.append(juris)
+            
+            # Si no hay documentos recientes, mostrar los más recientes disponibles
+            if not circulares_recientes and circulares:
+                print(f"[SII] No hay circulares de los últimos {dias_atras} días, mostrando las 3 más recientes")
+                circulares_recientes = circulares[:3]
+            
+            if not resoluciones_recientes and resoluciones:
+                print(f"[SII] No hay resoluciones de los últimos {dias_atras} días, mostrando las 3 más recientes")
+                resoluciones_recientes = resoluciones[:3]
+                
         else:
-            # Filtrar por cantidad (comportamiento anterior)
-            circulares_recientes = []
-            for circular in circulares[:5]:  # Top 5 más recientes
-                circulares_recientes.append(circular)
-            
-            resoluciones_recientes = []
-            for resolucion in resoluciones[:5]:  # Top 5 más recientes
-                resoluciones_recientes.append(resolucion)
-            
+            print(f"[SII] Obteniendo novedades tributarias más recientes...")
+            # Comportamiento por defecto: mostrar las más recientes
+            circulares_recientes = circulares[:5]  # Top 5 más recientes
+            resoluciones_recientes = resoluciones[:5]  # Top 5 más recientes
             jurisprudencia_reciente = jurisprudencia[:10]  # Top 10 más recientes
         
         resultado = {

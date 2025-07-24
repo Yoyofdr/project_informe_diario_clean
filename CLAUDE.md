@@ -54,14 +54,40 @@ msg['To'] = "rfernandezdelrio@uc.cl"
 - El pie del informe NO debe incluir estadísticas detalladas
 
 ### 🎯 SCRIPT DE REFERENCIA:
-**SIEMPRE USAR**: `generar_informe_oficial.py`
+**SIEMPRE USAR**: `generar_informe_oficial_integrado_mejorado.py`
 - Contiene todo el proceso correcto
-- Usa el scraper oficial
-- Usa la plantilla oficial
+- Usa el scraper oficial del Diario Oficial
+- **IMPORTANTE**: Actualiza automáticamente los enlaces CMF con el formato correcto
 - Usa las direcciones correctas
+- Genera informes integrados con Diario Oficial + CMF
 
 Ejemplo de uso:
 ```bash
-python generar_informe_oficial.py                    # Para hoy
-python generar_informe_oficial.py "21-07-2025"      # Para fecha específica
+python generar_informe_oficial_integrado_mejorado.py                    # Para hoy
+python generar_informe_oficial_integrado_mejorado.py "21-07-2025"      # Para fecha específica
 ```
+
+## 🔗 ENLACES CMF - INFORMACIÓN CRÍTICA
+
+### ⚠️ FORMATO CORRECTO DE ENLACES CMF:
+Los enlaces de hechos esenciales CMF DEBEN tener este formato:
+```
+https://www.cmfchile.cl/sitio/aplic/serdoc/ver_sgd.php?s567=[32_CARACTERES_HEX][CADENA_BASE64]&secuencia=-1&t=[TIMESTAMP]
+```
+
+Ejemplo correcto:
+```
+https://www.cmfchile.cl/sitio/aplic/serdoc/ver_sgd.php?s567=aca10a71d6390ef27ab35f494e6db994VFdwQmVVNVVRVE5OUkZWNFRtcFZNMDEzUFQwPQ==&secuencia=-1&t=1753329541
+```
+
+### ✅ SCRAPER CMF MEJORADO:
+**USAR**: `scraper_cmf_mejorado.py`
+- Obtiene automáticamente los enlaces correctos del día
+- Actualiza el archivo `hechos_cmf_selenium_reales.json`
+- Se ejecuta automáticamente al generar el informe
+
+### ❌ NUNCA HACER:
+- NO usar enlaces cortos o incompletos
+- NO inventar tokens o IDs
+- NO usar enlaces de búsqueda genéricos
+- NO confiar en enlaces antiguos sin verificar
