@@ -110,4 +110,49 @@ dmypy.json
 
 # Backup files
 *.bak
-*.backup 
+*.backup
+
+# Django specific
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+sent_emails/
+
+# Project specific - archive and temp files
+archive/
+scripts/testing/test_*.py
+scripts/email/enviar_informe_test*.py
+edition_cache_*.json
+debug_*.html
+debug_*.png
+salida_*.txt
+informe_historico_*.html
+selenium_*.png
+selenium_*.html
+
+# Generated reports (old versions)
+informe_*_07_2025.html
+informe_diario_oficial_*_07_2025*.html
+ejemplo_*.html
+preview_*.html
+
+# Node.js (for project folders)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+
+# PDF files (unless needed)
+tipos_cambio_*.pdf
+
+# Temporary project folders
+bolt_tmp/
+project-bolt-* 

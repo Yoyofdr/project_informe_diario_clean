@@ -44,12 +44,25 @@ informediario/
 │   ├── models.py          # Modelos de datos
 │   ├── views.py           # Vistas y lógica de negocio
 │   ├── services/          # Servicios (scraping, IA, email)
-│   └── templates/         # Templates HTML
+│   ├── management/        # Comandos de gestión
+│   └── tests/             # Tests unitarios
 ├── market_sniper/         # Configuración de Django
 ├── templates/             # Templates globales
-├── static/               # Archivos estáticos
-├── manage.py             # Comando de Django
-└── index.html            # Demo para GitHub Pages
+├── docs/                  # Documentación del proyecto
+├── scripts/               # Scripts auxiliares
+│   ├── config/            # Scripts de configuración
+│   ├── email/             # Scripts de envío de emails
+│   ├── reports/           # Scripts de generación de informes
+│   ├── scraping/          # Scripts de scraping
+│   └── testing/           # Scripts de prueba
+├── frontend-landing/      # Proyecto React para landing page
+├── archive/               # Archivos históricos
+├── staticfiles/           # Archivos estáticos compilados
+├── generar_informe_oficial.py  # Script principal
+├── manage.py              # Comando de Django
+├── index.html             # Demo para GitHub Pages
+├── CLAUDE.md              # Instrucciones importantes
+└── .env.example           # Plantilla de configuración
 ```
 
 ## 🚀 Instalación Local
