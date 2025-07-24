@@ -54,6 +54,13 @@ class HechoEsencial(models.Model):
         (2, 'Media'),
         (3, 'Alta'),
     ]
+    
+    CATEGORIA_CHOICES = [
+        ('CRITICO', 'Crítico'),
+        ('IMPORTANTE', 'Importante'),
+        ('MODERADO', 'Moderado'),
+        ('RUTINARIO', 'Rutinario'),
+    ]
 
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='hechos_esenciales')
     titulo = models.CharField(max_length=500)
@@ -62,6 +69,12 @@ class HechoEsencial(models.Model):
     resumen = models.TextField(blank=True, null=True, help_text="Resumen del hecho esencial generado por IA.")
     relevancia = models.IntegerField(choices=RELEVANCIA_CHOICES, blank=True, null=True, help_text="Nivel de relevancia determinado por IA.")
     notificacion_enviada = models.BooleanField(default=False)
+    
+    # Nuevos campos para criterios profesionales
+    categoria = models.CharField(max_length=20, choices=CATEGORIA_CHOICES, default='MODERADO', help_text="Categoría según criterios profesionales")
+    relevancia_profesional = models.FloatField(default=5.0, help_text="Relevancia profesional (1-10)")
+    es_empresa_ipsa = models.BooleanField(default=False, help_text="Indica si la empresa es parte del IPSA al momento del hecho")
+    materia = models.CharField(max_length=500, blank=True, null=True, help_text="Contexto adicional del hecho")
 
     class Meta:
         ordering = ['-fecha_publicacion']
@@ -166,3 +179,31 @@ class InformeEnviado(models.Model):
 
     def __str__(self):
         return f"Informe {self.empresa.nombre} - {self.fecha_envio.date()}"
+
+class DocumentoSII(models.Model):
+    """
+    Representa un documento del Servicio de Impuestos Internos (circulares, resoluciones, jurisprudencia)
+    """
+    TIPO_DOCUMENTO_CHOICES = [
+        ('CIRCULAR', 'Circular'),
+        ('RESOLUCION', 'Resolución'),
+        ('JURISPRUDENCIA', 'Jurisprudencia'),
+    ]
+    
+    tipo_documento = models.CharField(max_length=20, choices=TIPO_DOCUMENTO_CHOICES)
+    numero = models.CharField(max_length=50)
+    titulo = models.CharField(max_length=500)
+    url = models.URLField(max_length=500)
+    fecha_publicacion = models.DateField()
+    contenido = models.TextField(blank=True, null=True)
+    resumen = models.TextField(blank=True, null=True, help_text="Resumen generado por IA")
+    relevancia = models.IntegerField(default=2, help_text="Relevancia (1-3)")
+    es_relevante = models.BooleanField(default=True, help_text="Si debe incluirse en informes")
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-fecha_publicacion']
+        unique_together = ('tipo_documento', 'numero')
+        
+    def __str__(self):
+        return f"{self.get_tipo_documento_display()} {self.numero} - {self.titulo}"

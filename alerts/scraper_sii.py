@@ -436,7 +436,8 @@ def obtener_novedades_tributarias_sii(fecha_referencia=None, dias_atras=7):
     para una fecha específica o los últimos días especificados
     
     Args:
-        fecha_referencia (datetime): Fecha específica para filtrar (busca día anterior)
+        fecha_referencia (str or datetime): Fecha específica para filtrar (busca día anterior)
+                                           Si es string, debe estar en formato 'DD-MM-YYYY'
         dias_atras (int): Número de días hacia atrás para considerar como "reciente"
     
     Returns:
@@ -454,6 +455,9 @@ def obtener_novedades_tributarias_sii(fecha_referencia=None, dias_atras=7):
         year = datetime.now().year
         
         if fecha_referencia:
+            # Convertir string a datetime si es necesario
+            if isinstance(fecha_referencia, str):
+                fecha_referencia = datetime.strptime(fecha_referencia, "%d-%m-%Y")
             dia_anterior = fecha_referencia - timedelta(days=1)
             print(f"[SII] Obteniendo novedades tributarias del {dia_anterior.strftime('%d-%m-%Y')}...")
         else:

@@ -1,70 +1,79 @@
 #!/usr/bin/env python
 """
-Script de referencia para generar informes del Diario Oficial
-SIEMPRE USAR ESTE SCRIPT COMO BASE
+Script para generar informe integrado con contenido del Diario Oficial, SII y CMF
+Uso: python generar_informe_oficial_integrado.py [fecha]
 """
 import os
 import sys
 import django
-from datetime import datetime
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from datetime import datetime, timedelta
+import argparse
 
 # Configurar Django
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'market_sniper.settings')
 django.setup()
 
-# IMPORTANTE: Usar SIEMPRE el scraper oficial del proyecto
+from django.utils import timezone
+from django.template import engines
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+# Importar scrapers
 from alerts.scraper_diario_oficial import obtener_sumario_diario_oficial
 from alerts.scraper_sii import obtener_novedades_tributarias_sii
-from alerts.utils.sii_utils import SECCIONES_SII, clasificar_tipo_documento_sii, obtener_seccion_sii
-from django.template import engines
+from alerts.models import HechoEsencial, DocumentoSII
 
-def generar_informe_diario_oficial(fecha=None):
-    """
-    Genera y envía el informe del Diario Oficial usando el sistema oficial
-    
-    Args:
-        fecha (str): Fecha en formato DD-MM-YYYY. Si no se proporciona, usa hoy.
-    """
-    
-    if fecha is None:
-        fecha = datetime.now().strftime("%d-%m-%Y")
-    
-    print(f"=== GENERANDO INFORME OFICIAL DEL {fecha} ===\n")
-    
-    # PASO 1: Usar el scraper oficial (NO crear uno nuevo)
-    print("1. Ejecutando scraper oficial del Diario Oficial...")
-    resultado = obtener_sumario_diario_oficial(fecha)
-    
-    if not resultado:
-        print("❌ Error: No se obtuvieron resultados del scraper")
-        return False
-    
-    publicaciones = resultado.get('publicaciones', [])
-    valores_monedas = resultado.get('valores_monedas', {})
-    total_documentos = resultado.get('total_documentos', 0)
-    
-    print(f"\n✅ Resultados del scraper del Diario Oficial:")
-    print(f"   - Total documentos analizados: {total_documentos}")
-    print(f"   - Publicaciones relevantes: {len(publicaciones)}")
-    
-    # PASO 1B: Obtener novedades tributarias del SII
-    print("\n1B. Obteniendo novedades tributarias del SII...")
-    # Convertir fecha string a datetime object para filtrado
-    fecha_obj = datetime.strptime(fecha, "%d-%m-%Y")
-    novedades_sii = obtener_novedades_tributarias_sii(fecha_referencia=fecha_obj)
-    
-    print(f"✅ Resultados del scraper del SII:")
-    print(f"   - Circulares: {len(novedades_sii['circulares'])}")
-    print(f"   - Resoluciones Exentas: {len(novedades_sii['resoluciones_exentas'])}")
-    print(f"   - Jurisprudencia Administrativa: {len(novedades_sii['jurisprudencia_administrativa'])}")
-    print(f"   - Total novedades SII: {novedades_sii['total_novedades']}")
-    
-    # ==================== PASO 2: ORGANIZAR POR SECCIONES ====================
-    # Definir estructura de secciones del informe
+def obtener_hechos_cmf_dia_anterior(fecha):
+    """Obtiene los hechos esenciales CMF del día anterior"""
+    try:
+        # Convertir fecha string a datetime
+        fecha_obj = datetime.strptime(fecha, "%d-%m-%Y")
+        # CMF muestra hechos del día anterior (T-1)
+        fecha_anterior = fecha_obj - timedelta(days=1)
+        
+        # Obtener hechos de esa fecha
+        hechos = HechoEsencial.objects.filter(
+            fecha_publicacion__date=fecha_anterior.date(),
+            resumen__isnull=False  # Solo con resumen
+        ).exclude(
+            categoria='RUTINARIO'  # Excluir rutinarios
+        ).select_related('empresa').order_by(
+            '-relevancia_profesional',  # Ordenar por relevancia
+            '-fecha_publicacion'
+        )[:12]  # Máximo 12 hechos
+        
+        # Formatear para la plantilla
+        hechos_formateados = []
+        for hecho in hechos:
+            # Emoji según categoría
+            emoji_map = {
+                'CRITICO': '🔴',
+                'IMPORTANTE': '🟡',
+                'MODERADO': '🟢'
+            }
+            emoji = emoji_map.get(hecho.categoria, '')
+            
+            hechos_formateados.append({
+                'empresa': hecho.empresa.nombre,
+                'titulo': hecho.titulo,
+                'resumen': hecho.resumen,
+                'url': hecho.url,
+                'categoria': hecho.categoria,
+                'categoria_emoji': emoji,
+                'relevancia': hecho.relevancia_profesional,
+                'es_ipsa': hecho.es_empresa_ipsa
+            })
+            
+        return hechos_formateados
+        
+    except Exception as e:
+        print(f'[WARNING] Error obteniendo hechos CMF: {str(e)}')
+        return []
+
+def organizar_secciones_dof(publicaciones):
+    """Organiza las publicaciones del Diario Oficial por secciones"""
     secciones_dict = {
         'NORMAS GENERALES': {
             'nombre': 'NORMAS GENERALES',
@@ -80,95 +89,72 @@ def generar_informe_diario_oficial(fecha=None):
             'nombre': 'AVISOS DESTACADOS',
             'descripcion': 'Licitaciones, concursos públicos y avisos importantes',
             'publicaciones': []
-        },
-        'SII_CIRCULARES': {
-            'nombre': 'SERVICIO DE IMPUESTOS INTERNOS - CIRCULARES',
-            'descripcion': 'Circulares y normativas generales del SII',
-            'publicaciones': []
-        },
-        'SII_RESOLUCIONES': {
-            'nombre': 'SERVICIO DE IMPUESTOS INTERNOS - RESOLUCIONES',
-            'descripcion': 'Resoluciones exentas y normativas específicas del SII',
-            'publicaciones': []
-        },
-        'SII_JURISPRUDENCIA': {
-            'nombre': 'SERVICIO DE IMPUESTOS INTERNOS - JURISPRUDENCIA',
-            'descripcion': 'Jurisprudencia administrativa tributaria del SII',
-            'publicaciones': []
         }
     }
     
-    # ==================== PROCESAMIENTO DEL DIARIO OFICIAL ====================
-    # Clasificar publicaciones del Diario Oficial en las secciones correspondientes
     for pub in publicaciones:
         seccion = pub.get('seccion', 'NORMAS GENERALES').upper()
+        if seccion in secciones_dict:
+            secciones_dict[seccion]['publicaciones'].append(pub)
+    
+    # Retornar solo secciones con contenido
+    return [s for s in secciones_dict.values() if s['publicaciones']]
+
+def generar_informe_integrado(fecha=None, no_enviar=False):
+    """
+    Genera y envía el informe integrado
+    
+    Args:
+        fecha (str): Fecha en formato DD-MM-YYYY. Si no se proporciona, usa hoy.
+        no_enviar (bool): Si es True, no envía el email
+    """
+    
+    if fecha is None:
+        fecha = datetime.now().strftime("%d-%m-%Y")
+    
+    print(f"\n{'='*60}")
+    print(f"GENERANDO INFORME INTEGRADO - {fecha}")
+    print(f"{'='*60}\n")
+    
+    # 1. OBTENER DATOS DEL DIARIO OFICIAL
+    print("1. Obteniendo datos del Diario Oficial...")
+    resultado_dof = obtener_sumario_diario_oficial(fecha)
+    
+    if not resultado_dof:
+        print("❌ Error: No se obtuvieron resultados del Diario Oficial")
+        return False
         
-        # Si es contenido SII, clasificar en la subsección correspondiente
-        if pub.get('es_sii', False):
-            tipo_doc = clasificar_tipo_documento_sii(pub.get('titulo', ''))
-            seccion_sii = obtener_seccion_sii(tipo_doc)
-            
-            # Solo agregar a subsecciones específicas si existen
-            if seccion_sii in secciones_dict:
-                secciones_dict[seccion_sii]['publicaciones'].append(pub)
-            else:
-                # Fallback a resoluciones si no existe la sección
-                secciones_dict['SII_RESOLUCIONES']['publicaciones'].append(pub)
-        else:
-            # Clasificar en las secciones normales del Diario Oficial
-            if seccion in secciones_dict:
-                secciones_dict[seccion]['publicaciones'].append(pub)
-            else:
-                # Si la sección no existe, usar NORMAS GENERALES por defecto
-                secciones_dict['NORMAS GENERALES']['publicaciones'].append(pub)
+    publicaciones_dof = resultado_dof.get('publicaciones', [])
+    valores_monedas = resultado_dof.get('valores_monedas', {})
+    total_documentos = resultado_dof.get('total_documentos', 0)
     
-    # ==================== PROCESAMIENTO DE NOVEDADES SII ====================
-    # Agregar contenido del scraper específico del SII
-    if novedades_sii['total_novedades'] > 0:
-        
-        # 1. Procesar Circulares
-        for circular in novedades_sii['circulares']:
-            pub_sii = {
-                'titulo': f"Circular N° {circular['numero']} - {circular['fecha']}",
-                'resumen': circular['titulo'],
-                'url_pdf': circular['url_pdf'],
-                'es_sii': True,
-                'fuente': circular.get('fuente', 'SII - Subdirección de Fiscalización')
-            }
-            secciones_dict['SII_CIRCULARES']['publicaciones'].append(pub_sii)
-        
-        # 2. Procesar Resoluciones Exentas
-        for resolucion in novedades_sii['resoluciones_exentas']:
-            pub_sii = {
-                'titulo': f"Resolución Exenta SII N° {resolucion['numero']} - {resolucion['fecha']}",
-                'resumen': resolucion['titulo'],
-                'url_pdf': resolucion['url_pdf'],
-                'es_sii': True,
-                'fuente': resolucion.get('fuente', 'SII - Subdirección Jurídica')
-            }
-            secciones_dict['SII_RESOLUCIONES']['publicaciones'].append(pub_sii)
-        
-        # 3. Procesar Jurisprudencia Administrativa
-        for juris in novedades_sii['jurisprudencia_administrativa']:
-            pub_sii = {
-                'titulo': f"Jurisprudencia N° {juris['numero']} - {juris['fecha']}",
-                'resumen': juris['titulo'],
-                'url_pdf': juris['url_pdf'],
-                'es_sii': True,
-                'fuente': juris.get('fuente', 'SII - Jurisprudencia')
-            }
-            secciones_dict['SII_JURISPRUDENCIA']['publicaciones'].append(pub_sii)
+    print(f"   ✓ {len(publicaciones_dof)} publicaciones relevantes")
     
-    secciones = [s for s in secciones_dict.values() if s['publicaciones']]
+    # 2. OBTENER DATOS DEL SII
+    print("\n2. Obteniendo novedades del SII...")
+    try:
+        resultado_sii = obtener_novedades_tributarias_sii(fecha)
+        circulares_sii = resultado_sii.get('circulares', [])
+        resoluciones_sii = resultado_sii.get('resoluciones', [])
+        print(f"   ✓ {len(circulares_sii)} circulares, {len(resoluciones_sii)} resoluciones")
+    except Exception as e:
+        print(f"   ✗ Error obteniendo datos SII: {str(e)}")
+        circulares_sii = []
+        resoluciones_sii = []
     
-    # PASO 3: Usar la plantilla OFICIAL (no crear una nueva)
-    print("\n2. Generando HTML con la plantilla oficial...")
+    # 3. OBTENER HECHOS ESENCIALES CMF
+    print("\n3. Obteniendo hechos esenciales CMF...")
+    hechos_cmf = obtener_hechos_cmf_dia_anterior(fecha)
+    print(f"   ✓ {len(hechos_cmf)} hechos relevantes")
     
-    with open('templates/informe_diario_oficial_plantilla.html', 'r', encoding='utf-8') as f:
-        template_content = f.read()
+    # 4. ORGANIZAR CONTENIDO POR SECCIONES
+    print("\n4. Organizando contenido...")
     
-    django_engine = engines['django']
-    template = django_engine.from_string(template_content)
+    # Secciones del Diario Oficial
+    secciones_dof = organizar_secciones_dof(publicaciones_dof)
+    
+    # 5. GENERAR HTML
+    print("\n5. Generando HTML...")
     
     # Preparar contexto
     fecha_obj = datetime.strptime(fecha, "%d-%m-%Y")
@@ -179,70 +165,74 @@ def generar_informe_diario_oficial(fecha=None):
     }
     fecha_formato = f"{fecha_obj.day} de {meses[fecha_obj.month]}, {fecha_obj.year}"
     
-    # Obtener número de edición del caché
-    edicion = "N/A"
-    try:
-        import json
-        with open('edition_cache.json', 'r') as f:
-            cache = json.load(f)
-            edicion = cache.get(fecha, "N/A")
-    except:
-        pass
+    # Obtener número de edición
+    edicion = resultado_dof.get('edicion', 'N/A')
     
     context = {
         'fecha': fecha,
         'fecha_formato': fecha_formato,
         'edicion_numero': edicion,
         'total_documentos': total_documentos,
-        'publicaciones_relevantes': len(publicaciones),
-        'secciones': secciones,
-        'valores_monedas': valores_monedas
+        'publicaciones_relevantes': len(publicaciones_dof),
+        'secciones': secciones_dof,
+        'valores_monedas': valores_monedas,
+        # Contenido SII
+        'circulares_sii': circulares_sii,
+        'resoluciones_sii': resoluciones_sii,
+        # Contenido CMF
+        'hechos_cmf': hechos_cmf
     }
     
+    # Renderizar plantilla
+    with open('templates/informe_diario_oficial_plantilla.html', 'r', encoding='utf-8') as f:
+        template_content = f.read()
+    
+    django_engine = engines['django']
+    template = django_engine.from_string(template_content)
     html = template.render(context)
     
-    # Guardar copia
-    filename = f"informe_diario_oficial_{fecha.replace('-', '_')}.html"
+    # Guardar archivo
+    filename = f"informe_integrado_{fecha.replace('-', '_')}.html"
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"📄 Informe guardado en: {filename}")
+    print(f"   ✓ Archivo guardado: {filename}")
     
-    # PASO 4: Enviar con las direcciones CORRECTAS
-    print("\n3. Enviando email...")
-    
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = f"Informe Diario Oficial - {fecha_formato} (Edición {edicion})"
-    msg['From'] = "rodrigo@carvuk.com"  # SIEMPRE esta dirección
-    msg['To'] = "rfernandezdelrio@uc.cl"  # SIEMPRE esta dirección
-    
-    html_part = MIMEText(html, 'html')
-    msg.attach(html_part)
-    
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login("rodrigo@carvuk.com", "swqjlcwjaoooyzcb")
-        server.send_message(msg)
-        server.quit()
+    # 6. ENVIAR EMAIL
+    if not no_enviar:
+        print("\n6. Enviando email...")
         
-        print("\n✅ INFORME ENVIADO EXITOSAMENTE")
-        print(f"   De: rodrigo@carvuk.com")
-        print(f"   Para: rfernandezdelrio@uc.cl")
+        try:
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = f"Informe Integrado - {fecha_formato} (Edición {edicion})"
+            msg['From'] = "rodrigo@carvuk.com"
+            msg['To'] = "rfernandezdelrio@uc.cl"
+            
+            html_part = MIMEText(html, 'html')
+            msg.attach(html_part)
+            
+            # Enviar
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
+            server.login("rodrigo@carvuk.com", os.environ.get('EMAIL_PASSWORD', 'swqjlcwjaoooyzcb'))
+            server.send_message(msg)
+            server.quit()
+            
+            print("   ✓ Email enviado exitosamente")
+            
+        except Exception as e:
+            print(f"   ✗ Error enviando email: {str(e)}")
+    else:
+        print("\n6. Email NO enviado (--no-enviar activado)")
         
-        return True
-        
-    except Exception as e:
-        print(f"\n❌ Error enviando email: {str(e)}")
-        return False
+    print("\n✅ PROCESO COMPLETADO")
+    return True
 
 if __name__ == "__main__":
-    # Si se ejecuta directamente, generar informe de hoy
-    import sys
+    # Parser de argumentos
+    parser = argparse.ArgumentParser(description='Genera informe integrado del Diario Oficial, SII y CMF')
+    parser.add_argument('fecha', nargs='?', help='Fecha en formato DD-MM-YYYY (por defecto: hoy)')
+    parser.add_argument('--no-enviar', action='store_true', help='No enviar el email, solo generar el HTML')
     
-    if len(sys.argv) > 1:
-        # Permitir especificar fecha como argumento
-        fecha = sys.argv[1]
-    else:
-        fecha = None
+    args = parser.parse_args()
     
-    generar_informe_diario_oficial(fecha)
+    generar_informe_integrado(args.fecha, args.no_enviar)
