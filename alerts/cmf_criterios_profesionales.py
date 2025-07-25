@@ -194,9 +194,14 @@ CATEGORIAS_HECHOS = {
             "nombramiento gerente", "asume como gerente general",
             
             # Emisiones significativas
-            "emision de bonos", "emision de acciones", "aumento de capital",
+            "emisión de bonos", "emisión de acciones", "aumento de capital",
+            "colocación de bonos", "programa de emisión", "emisión de deuda",
+            "oferta de bonos", "oferta pública de bonos", "colocación exitosa",
+            "colocación de valores", "colocación en mercados", "colocación internacional",
+            # Sin tildes para compatibilidad
+            "emision de bonos", "emision de acciones",
             "colocacion de bonos", "programa de emision", "emision de deuda",
-            "oferta de bonos", "oferta publica de bonos", "colocacion exitosa",
+            "colocacion de valores", "colocacion en mercados",
             
             # Contratos materiales
             "contrato material", "adjudicacion", "licitacion ganada",
@@ -291,9 +296,9 @@ def calcular_relevancia_profesional(titulo, materia, entidad, contexto_adicional
     # Relevancia base según categoría
     relevancia = peso_base
     
-    # Bonus por ser empresa IPSA
+    # Bonus por ser empresa IPSA - Aumentado para asegurar inclusión
     if es_ipsa:
-        relevancia += 1.5
+        relevancia += 2.5  # Aumentado de 1.5 a 2.5
     # Bonus menor por ser empresa estratégica no-IPSA
     elif es_prioritaria:
         relevancia += 0.8
@@ -398,3 +403,101 @@ def get_icono_categoria(categoria):
         "RUTINARIO": "⚪"
     }
     return iconos.get(categoria, "⚪")
+
+def filtrar_hechos_profesional(hechos, max_hechos=12):
+    """
+    Filtra hechos esenciales según criterios profesionales
+    Máximo 12 hechos, priorizando por relevancia
+    
+    Reglas de filtrado (según instrucciones de Kampala):
+    - Máximo 12 hechos (NUNCA más)
+    - 🔴 Críticos (9-10 pts) → Siempre incluir
+    - 🟡 Importantes (7-8.9 pts) → Incluir si hay espacio
+    - 🟢 Moderados (5-6.9 pts) → Solo si son IPSA
+    - ⚪ Rutinarios (<5 pts) → NUNCA incluir
+    """
+    # Calcular relevancia para cada hecho
+    hechos_evaluados = []
+    
+    for hecho in hechos:
+        titulo = hecho.get('titulo', '')
+        materia = hecho.get('materia', '')
+        entidad = hecho.get('entidad', '')
+        
+        # Calcular relevancia usando la función existente
+        relevancia, categoria, es_ipsa = calcular_relevancia_profesional(
+            titulo, materia, entidad
+        )
+        
+        # Agregar información de relevancia al hecho
+        hecho_evaluado = hecho.copy()
+        hecho_evaluado['relevancia_calculada'] = relevancia
+        hecho_evaluado['categoria_relevancia'] = categoria
+        hecho_evaluado['es_ipsa'] = es_ipsa
+        
+        hechos_evaluados.append(hecho_evaluado)
+    
+    # Separar por categorías según puntuación
+    criticos = [h for h in hechos_evaluados if h['relevancia_calculada'] >= 9]
+    importantes = [h for h in hechos_evaluados if 7 <= h['relevancia_calculada'] < 9]
+    moderados = [h for h in hechos_evaluados if 5 <= h['relevancia_calculada'] < 7]
+    rutinarios = [h for h in hechos_evaluados if h['relevancia_calculada'] < 5]
+    
+    # Construir lista final según reglas
+    hechos_finales = []
+    
+    # 1. Incluir TODOS los críticos (siempre)
+    criticos_ordenados = sorted(criticos, key=lambda x: x['relevancia_calculada'], reverse=True)
+    hechos_finales.extend(criticos_ordenados)
+    
+    # 2. Incluir importantes si hay espacio
+    espacio_restante = max_hechos - len(hechos_finales)
+    if espacio_restante > 0:
+        importantes_ordenados = sorted(importantes, key=lambda x: x['relevancia_calculada'], reverse=True)
+        hechos_finales.extend(importantes_ordenados[:espacio_restante])
+    
+    # 3. Incluir moderados si hay espacio (todos, no solo IPSA)
+    espacio_restante = max_hechos - len(hechos_finales)
+    if espacio_restante > 0:
+        moderados_ordenados = sorted(moderados, key=lambda x: x['relevancia_calculada'], reverse=True)
+        hechos_finales.extend(moderados_ordenados[:espacio_restante])
+    
+    # 4. NUNCA incluir rutinarios (regla estricta)
+    
+    # Ordenar lista final por relevancia
+    hechos_finales = sorted(hechos_finales, key=lambda x: x['relevancia_calculada'], reverse=True)
+    
+    # Asegurar que no excedemos el máximo
+    hechos_finales = hechos_finales[:max_hechos]
+    
+    # Log de filtrado para transparencia
+    print(f"\n=== Filtrado Profesional CMF ===")
+    print(f"Total hechos originales: {len(hechos)}")
+    print(f"- Críticos (9-10): {len(criticos)}")
+    print(f"- Importantes (7-8.9): {len(importantes)}")
+    print(f"- Moderados (5-6.9): {len(moderados)} (IPSA: {len([h for h in moderados if h['es_ipsa']])})")
+    print(f"- Rutinarios (<5): {len(rutinarios)} [DESCARTADOS]")
+    print(f"Total hechos seleccionados: {len(hechos_finales)}")
+    print(f"================================\n")
+    
+    return hechos_finales
+
+def aplicar_regla_dorada(hecho):
+    """
+    Aplica la regla dorada: "¿Le importaría esto a un inversionista institucional?"
+    """
+    relevancia = hecho.get('relevancia_calculada', 0)
+    es_ipsa = hecho.get('es_ipsa', False)
+    categoria = hecho.get('categoria_relevancia', 'RUTINARIO')
+    
+    # Un inversionista institucional se interesa en:
+    # 1. Cualquier hecho crítico o importante (relevancia >= 7)
+    # 2. Hechos moderados solo si son de empresas IPSA
+    # 3. Nunca en hechos rutinarios
+    
+    if relevancia >= 7:
+        return True
+    elif relevancia >= 5 and es_ipsa:
+        return True
+    else:
+        return False
