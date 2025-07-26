@@ -196,10 +196,6 @@
                     <p class="text-muted small mb-0">¿Necesitas ayuda? <a href="mailto:contacto@informediario.cl" class="text-primary text-decoration-none">contacto@informediario.cl</a></p>
                 </div>
             </div>
-            
-            <div class="text-center mt-4">
-                <p class="text-muted small">© 2025 Informe Diario. Todos los derechos reservados.</p>
-            </div>
         </div>
     </div>
     
@@ -207,10 +203,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Demo functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Esta es una demostración. Para acceder al servicio real, visita https://informediario.cl');
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simulación de inicio de sesión exitoso
+            alert('¡Bienvenido de vuelta!\n\nHas iniciado sesión como: ' + email);
+            
+            // Redirigir al dashboard
+            window.location.href = 'dashboard.html';
         });
     </script>
 </body>

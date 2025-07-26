@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Diario - Fuentes de Información</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #10b981;
+            --primary-color: #3b82f6;
+            --purple-color: #9333ea;
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .hero-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, -60px); }
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-section {
+            background: #f9fafb;
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .info-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .info-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .icon-box-oficial {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .icon-box-sii {
+            background: linear-gradient(135deg, #e0f2ff, #bae6fd);
+        }
+
+        .icon-box-cmf {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+        }
+
+        .info-card:hover .icon-box {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list li:hover {
+            padding-left: 2.5rem;
+            background: #f9fafb;
+            margin: 0 -1.5rem;
+            padding-right: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .check-icon {
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-list li:hover .check-icon {
+            transform: scale(1.2);
+        }
+
+        .text-success { color: var(--success-color) !important; }
+        .text-primary { color: var(--primary-color) !important; }
+        .text-purple { color: var(--purple-color) !important; }
+        
+        /* Asegurar que los checkmarks sean visibles */
+        .check-icon {
+            font-weight: bold;
+        }
+        
+        .icon-box-cmf {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+        }
+
+        .cta-section {
+            background: #1f2937;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .stats-section {
+            background: white;
+            padding: 60px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.125rem;
+            color: #6b7280;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .info-card {
+                margin-bottom: 2rem;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="main-title fade-in">Informe Diario Profesional</h1>
+            <p class="subtitle fade-in">Toda la información relevante para tu empresa, en un solo lugar</p>
+            <button class="btn btn-primary-custom fade-in">
+                Comenzar prueba gratuita <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="stat-box fade-in">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Fuentes Oficiales</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box fade-in">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Monitoreo Continuo</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-box fade-in">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Información Verificada</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Information Sources Section -->
+    <section class="info-section">
+        <div class="container">
+            <h2 class="text-center section-title">¿Qué información recibes?</h2>
+            <div class="row g-4 mt-5">
+                
+                <!-- Diario Oficial -->
+                <div class="col-lg-4 fade-in">
+                    <div class="card info-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="icon-box icon-box-oficial">
+                                    <svg width="32" height="32" fill="none" stroke="#374151" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                              d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="card-title ms-3">Diario Oficial</h3>
+                            </div>
+                            <ul class="info-list">
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-success"></i>
+                                    <span>Leyes y Decretos</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-success"></i>
+                                    <span>Normativas nuevas</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-success"></i>
+                                    <span>Licitaciones públicas</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-success"></i>
+                                    <span>Avisos legales relevantes</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-success"></i>
+                                    <span>Modificaciones regulatorias</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SII -->
+                <div class="col-lg-4 fade-in">
+                    <div class="card info-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="icon-box icon-box-sii">
+                                    <svg width="32" height="32" fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                              d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="card-title ms-3">SII</h3>
+                            </div>
+                            <ul class="info-list">
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-primary"></i>
+                                    <span>Circulares tributarias</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-primary"></i>
+                                    <span>Resoluciones nuevas</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-primary"></i>
+                                    <span>Jurisprudencia tributaria</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-primary"></i>
+                                    <span>Oficios interpretativos</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-primary"></i>
+                                    <span>Cambios normativos</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CMF -->
+                <div class="col-lg-4 fade-in">
+                    <div class="card info-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-4">
+                                <div class="icon-box icon-box-cmf">
+                                    <svg width="32" height="32" fill="none" stroke="#7c3aed" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="card-title ms-3">CMF</h3>
+                            </div>
+                            <ul class="info-list">
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-purple"></i>
+                                    <span>Hechos esenciales de grandes empresas</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-purple"></i>
+                                    <span>Fusiones y adquisiciones</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-purple"></i>
+                                    <span>Cambios de directorio</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-purple"></i>
+                                    <span>Emisiones de valores</span>
+                                </li>
+                                <li>
+                                    <i class="bi bi-check2-circle check-icon text-purple"></i>
+                                    <span>Operaciones relevantes</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="mb-4">¿Listo para optimizar tu gestión de información?</h2>
+            <p class="mb-4">Únete a cientos de empresas que ya confían en nosotros</p>
+            <button class="btn btn-primary-custom">
+                Solicitar demo gratuita <i class="bi bi-calendar-check"></i>
+            </button>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
