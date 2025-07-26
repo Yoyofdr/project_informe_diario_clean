@@ -91,3 +91,30 @@ https://www.cmfchile.cl/sitio/aplic/serdoc/ver_sgd.php?s567=aca10a71d6390ef27ab3
 - NO inventar tokens o IDs
 - NO usar enlaces de búsqueda genéricos
 - NO confiar en enlaces antiguos sin verificar
+
+## 📊 FILTRADO PROFESIONAL DE HECHOS CMF
+
+### 🎯 REGLAS DE FILTRADO (Instrucciones de Kampala):
+- **Máximo 12 hechos** (NUNCA más)
+- 🔴 **Críticos (9-10 pts)** → Siempre incluir
+- 🟡 **Importantes (7-8.9 pts)** → Incluir si hay espacio
+- 🟢 **Moderados (5-6.9 pts)** → Solo si son IPSA
+- ⚪ **Rutinarios (<5 pts)** → NUNCA incluir
+
+### 📋 CATEGORÍAS DE RELEVANCIA:
+1. **CRÍTICO**: OPAs, fusiones, cambios de control, profit warnings, reestructuraciones
+2. **IMPORTANTE**: Cambios de gerencia, emisiones significativas, contratos materiales
+3. **MODERADO**: Resultados financieros, juntas de accionistas, dividendos
+4. **RUTINARIO**: Cambios administrativos menores, certificados, fe de erratas
+
+### 🏢 EMPRESAS IPSA:
+Las empresas del índice IPSA reciben prioridad adicional en el filtrado.
+
+### 💎 REGLA DORADA:
+"¿Le importaría esto a un inversionista institucional?"
+
+### 🔧 IMPLEMENTACIÓN:
+**ARCHIVO**: `alerts/cmf_criterios_profesionales.py`
+- Función `filtrar_hechos_profesional()` aplica todas las reglas
+- Función `calcular_relevancia_profesional()` asigna puntuación
+- Lista actualizada de empresas IPSA y estratégicas
