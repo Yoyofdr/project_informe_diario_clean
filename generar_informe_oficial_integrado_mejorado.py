@@ -46,18 +46,51 @@ def obtener_publicaciones_sii_dia(fecha):
         # Usar la función de novedades tributarias para obtener solo del día anterior
         try:
             from alerts.scraper_sii import obtener_novedades_tributarias_sii
-            novedades = obtener_novedades_tributarias_sii(fecha_referencia=fecha_anterior, dias_atras=1)
+            resultado_sii = obtener_novedades_tributarias_sii(fecha_referencia=fecha_anterior, dias_atras=1)
             
-            # Verificar que novedades sea una lista
-            if isinstance(novedades, list):
-                for nov in novedades[:5]:  # Máximo 5 publicaciones
-                    publicaciones.append({
-                        'tipo': nov.get('tipo', 'Documento'),
-                        'numero': nov.get('numero', ''),
-                        'titulo': nov.get('titulo', ''),
-                        'fecha_publicacion': nov.get('fecha', ''),
-                        'url': nov.get('url', '')
-                    })
+            # La función devuelve un diccionario con 'circulares' y 'resoluciones_exentas'
+            if isinstance(resultado_sii, dict):
+                # Solo procesar si realmente son del día anterior
+                # Verificar si las publicaciones son del día que buscamos
+                fecha_buscada_str = fecha_anterior.strftime("%d de %B de %Y").replace("January", "Enero").replace("February", "Febrero").replace("March", "Marzo").replace("April", "Abril").replace("May", "Mayo").replace("June", "Junio").replace("July", "Julio").replace("August", "Agosto").replace("September", "Septiembre").replace("October", "Octubre").replace("November", "Noviembre").replace("December", "Diciembre")
+                
+                # Procesar circulares - solo si son del día anterior
+                for circular in resultado_sii.get('circulares', []):
+                    fecha_pub = circular.get('fecha', '')
+                    # Solo incluir si la fecha coincide con el día anterior
+                    if fecha_pub and fecha_buscada_str.lower() in fecha_pub.lower():
+                        publicaciones.append({
+                            'tipo': 'Circular',
+                            'numero': circular.get('numero', ''),
+                            'titulo': circular.get('titulo', ''),
+                            'fecha_publicacion': fecha_pub,
+                            'url': circular.get('url_pdf', circular.get('url', ''))
+                        })
+                
+                # Procesar resoluciones exentas - solo si son del día anterior
+                for resolucion in resultado_sii.get('resoluciones_exentas', []):
+                    fecha_pub = resolucion.get('fecha', '')
+                    # Solo incluir si la fecha coincide con el día anterior
+                    if fecha_pub and fecha_buscada_str.lower() in fecha_pub.lower():
+                        publicaciones.append({
+                            'tipo': 'Resolución Exenta',
+                            'numero': resolucion.get('numero', ''),
+                            'titulo': resolucion.get('titulo', ''),
+                            'fecha_publicacion': fecha_pub,
+                            'url': resolucion.get('url_pdf', resolucion.get('url', ''))
+                        })
+                    
+                # Procesar jurisprudencia si existe - solo si es del día anterior
+                for juris in resultado_sii.get('jurisprudencia_administrativa', []):
+                    fecha_pub = juris.get('fecha', '')
+                    if fecha_pub and fecha_buscada_str.lower() in fecha_pub.lower():
+                        publicaciones.append({
+                            'tipo': 'Jurisprudencia',
+                            'numero': juris.get('numero', ''),
+                            'titulo': juris.get('titulo', ''),
+                            'fecha_publicacion': fecha_pub,
+                            'url': juris.get('url_pdf', juris.get('url', ''))
+                        })
         except Exception as e:
             logger.error(f"Error obteniendo novedades SII: {e}")
             # NO usar fallback - si no hay del día anterior, no mostrar nada
