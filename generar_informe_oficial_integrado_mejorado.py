@@ -13,6 +13,16 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 import logging
+from pathlib import Path
+
+# Cargar variables de entorno
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).parent / '.env'
+    if env_path.exists():
+        load_dotenv(env_path)
+except ImportError:
+    pass
 
 # Configurar Django
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -628,10 +638,18 @@ def enviar_informe_email(html, fecha):
     """
     Envía el informe por email
     """
-    # Configuración
-    de_email = "rodrigo@carvuk.com"
-    para_email = "rfernandezdelrio@uc.cl"
-    password = "swqjlcwjaoooyzcb"
+    # Configuración desde variables de entorno
+    de_email = os.getenv('EMAIL_FROM', 'contacto@informediariochile.cl')
+    para_email = os.getenv('DEFAULT_TO_EMAIL', 'rfernandezdelrio@uc.cl')
+    password = os.getenv('HOSTINGER_EMAIL_PASSWORD', '')
+    smtp_server = os.getenv('SMTP_SERVER', 'smtp.hostinger.com')
+    smtp_port = int(os.getenv('SMTP_PORT', '587'))
+    
+    # Verificar que tenemos la contraseña
+    if not password:
+        logger.error("❌ Error: No se encontró la contraseña del email")
+        logger.error("   Asegúrate de tener el archivo .env con HOSTINGER_EMAIL_PASSWORD")
+        return
     
     # Formatear fecha para el asunto
     fecha_obj = datetime.strptime(fecha, "%d-%m-%Y")
@@ -649,7 +667,7 @@ def enviar_informe_email(html, fecha):
     
     try:
         # Enviar
-        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
         server.login(de_email, password)
         server.send_message(msg)
