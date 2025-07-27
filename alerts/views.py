@@ -61,6 +61,35 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            
+            # Crear organización automáticamente para el nuevo usuario
+            # Extraer dominio del email
+            email_domain = user.email.split('@')[1] if '@' in user.email else 'personal.cl'
+            
+            # Crear nombre de organización basado en el nombre del usuario o email
+            if user.first_name and user.last_name:
+                org_name = f"{user.first_name} {user.last_name}"
+            elif user.first_name:
+                org_name = user.first_name
+            else:
+                org_name = user.email.split('@')[0]
+            
+            # Crear la organización
+            organizacion = Organizacion.objects.create(
+                nombre=org_name,
+                dominio=email_domain,
+                admin=user,
+                plan='gratis',
+                suscripcion_activa=True  # Activar automáticamente para usuarios nuevos
+            )
+            
+            # Agregar al usuario como destinatario de su propia organización
+            Destinatario.objects.create(
+                nombre=user.get_full_name() or user.username,
+                email=user.email,
+                organizacion=organizacion
+            )
+            
             auth_login(request, user)
             return redirect('alerts:dashboard')
     else:
